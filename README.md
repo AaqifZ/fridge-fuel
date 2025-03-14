@@ -3,8 +3,6 @@
 
 A responsive web application that helps users track their protein intake and discover high-protein recipes based on ingredients they already have.
 
-![Protein Tracker](public/og-image.png)
-
 ## Features
 
 - **Personalized Protein Target**: Calculate your daily protein needs based on weight, height, age, gender, and fitness goals
