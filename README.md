@@ -1,69 +1,85 @@
-# Welcome to your Lovable project
 
-## Project info
+# Protein Tracker Application
 
-**URL**: https://lovable.dev/projects/0fbde713-b3fa-40d8-9e84-a6eb67bcbed6
+A responsive web application that helps users track their protein intake and discover high-protein recipes based on ingredients they already have.
 
-## How can I edit this code?
+![Protein Tracker](public/og-image.png)
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Personalized Protein Target**: Calculate your daily protein needs based on weight, height, age, gender, and fitness goals
+- **Refrigerator Analysis**: Scan ingredients in your refrigerator to get recipe suggestions
+- **Recipe Recommendations**: Get personalized high-protein recipe recommendations
+- **User-friendly Interface**: Simple, intuitive UI built with shadcn/ui and Tailwind CSS
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0fbde713-b3fa-40d8-9e84-a6eb67bcbed6) and start prompting.
+## Live Demo
 
-Changes made via Lovable will be committed automatically to this repo.
+Visit the [live demo](https://lovable.dev/projects/0fbde713-b3fa-40d8-9e84-a6eb67bcbed6) to see the application in action.
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js (v14 or newer)
+- npm or yarn
 
-Follow these steps:
+### Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/protein-tracker.git
+   cd protein-tracker
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+3. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+4. Open your browser and navigate to `http://localhost:5173`
 
-**Edit a file directly in GitHub**
+## Technology Stack
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Framework**: React with TypeScript
+- **Styling**: Tailwind CSS
+- **Components**: shadcn/ui
+- **State Management**: Zustand
+- **Data Fetching**: TanStack Query
+- **Routing**: React Router
+- **Build Tool**: Vite
 
-**Use GitHub Codespaces**
+## Project Structure
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+See [DEVELOPMENT.md](./DEVELOPMENT.md) for detailed information about the project structure and development workflow.
 
-## What technologies are used for this project?
+## Contributing
 
-This project is built with .
+We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Deploying to Your Own Domain
 
-## How can I deploy this project?
+While the application is hosted on Lovable.dev, you can deploy it to your own domain using services like Netlify or Vercel. See [Custom Domains](https://docs.lovable.dev/tips-tricks/custom-domain/) in the Lovable documentation for more details.
 
-Simply open [Lovable](https://lovable.dev/projects/0fbde713-b3fa-40d8-9e84-a6eb67bcbed6) and click on Share -> Publish.
+## GitHub Setup
 
-## I want to use a custom domain - is that possible?
+For detailed instructions on setting up this project in GitHub, please refer to the [GitHub Setup Guide](./GITHUB_SETUP.md).
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
+- [Vite](https://vitejs.dev/) for the fast development experience
+- [Lucide](https://lucide.dev/) for the icons
