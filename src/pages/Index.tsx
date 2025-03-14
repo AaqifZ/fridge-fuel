@@ -1,11 +1,25 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import React from 'react';
+import { Dumbbell } from 'lucide-react';
+import Dashboard from '@/components/Dashboard';
+
+const Index: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen pb-24 md:pb-0 md:pt-20 p-4">
+      <div className="container mx-auto max-w-4xl">
+        <div className="text-center mb-8 mt-6">
+          <h1 className="flex items-center justify-center">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-4xl font-bold">
+              GainChef
+            </span>
+            <Dumbbell className="w-8 h-8 text-primary ml-2" />
+          </h1>
+          <p className="text-muted-foreground max-w-lg mx-auto mt-2">
+            AI-powered recipes to help you hit your protein goals with what's in your fridge
+          </p>
+        </div>
+        
+        <Dashboard />
       </div>
     </div>
   );
