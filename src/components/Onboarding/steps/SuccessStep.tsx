@@ -4,8 +4,15 @@ import { Camera, CircleCheck } from 'lucide-react';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 
 interface SuccessStepProps {
-  userDetails: any;
-  updateUserDetails: (details: any) => void;
+  userDetails: {
+    weight?: number;
+    height?: number;
+    age?: number;
+    gender?: 'male' | 'female';
+    activityLevel?: string;
+    goal?: string;
+  };
+  updateUserDetails: (details: Partial<SuccessStepProps['userDetails']>) => void;
 }
 
 const SuccessStep: React.FC<SuccessStepProps> = () => {

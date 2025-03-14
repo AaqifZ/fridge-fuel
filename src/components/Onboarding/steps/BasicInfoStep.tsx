@@ -11,7 +11,7 @@ interface BasicInfoStepProps {
     age?: number;
     gender?: 'male' | 'female';
   };
-  updateUserDetails: (details: Partial<typeof userDetails>) => void;
+  updateUserDetails: (details: Partial<BasicInfoStepProps['userDetails']>) => void;
 }
 
 const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ userDetails, updateUserDetails }) => {

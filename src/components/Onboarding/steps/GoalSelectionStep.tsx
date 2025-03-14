@@ -8,7 +8,7 @@ interface GoalSelectionStepProps {
     activityLevel?: string;
     goal?: string;
   };
-  updateUserDetails: (details: Partial<typeof userDetails>) => void;
+  updateUserDetails: (details: Partial<GoalSelectionStepProps['userDetails']>) => void;
 }
 
 const GoalSelectionStep: React.FC<GoalSelectionStepProps> = ({ userDetails, updateUserDetails }) => {
