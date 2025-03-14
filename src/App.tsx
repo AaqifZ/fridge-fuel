@@ -14,10 +14,6 @@ import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
-// Add zustand persist
-import { create } from 'zustand';
-<lov-add-dependency>zustand@4.5.0</lov-add-dependency>
-
 const App = () => {
   // Add smooth page transitions
   useEffect(() => {
