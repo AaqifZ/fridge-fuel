@@ -6,6 +6,7 @@ import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import { Camera } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import WelcomeStep from './steps/WelcomeStep';
 import WeightSetupStep from './steps/WeightSetupStep';
 import TimelineActivityStep from './steps/TimelineActivityStep';
@@ -88,6 +89,9 @@ const OnboardingWizard = () => {
   const totalStepsShown = steps.length - 1;
   const currentVisibleStep = currentStep === 0 ? 1 : currentStep;
   
+  // Calculate optimal content height
+  const contentHeight = isMobile ? 'min-h-[550px]' : 'min-h-[600px]';
+  
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-secondary/10">
       <div className="glass-card w-full max-w-lg p-6 rounded-2xl shadow-xl border border-primary/10 animate-fade-in">
@@ -107,12 +111,14 @@ const OnboardingWizard = () => {
             </div>
           </div>
           
-          {/* Fixed height container for consistent sizing across steps */}
-          <div className={`${isMobile ? 'h-[450px]' : 'h-[500px]'} overflow-auto pb-2`}>
-            <CurrentStepComponent 
-              userDetails={userDetails}
-              updateUserDetails={updateUserDetails}
-            />
+          {/* Content container with ScrollArea for overflow */}
+          <div className={`${contentHeight}`}>
+            <ScrollArea className="h-full pr-4">
+              <CurrentStepComponent 
+                userDetails={userDetails}
+                updateUserDetails={updateUserDetails}
+              />
+            </ScrollArea>
           </div>
         </div>
         
