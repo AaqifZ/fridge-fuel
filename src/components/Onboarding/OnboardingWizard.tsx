@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -24,17 +23,14 @@ const OnboardingWizard = () => {
   const { setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
   
-  // Set to weight setup step (index 1) when component mounts, skipping welcome step
   useEffect(() => {
     setCurrentStep(1);
   }, [setCurrentStep]);
   
-  // If onboarding is already completed, redirect to analyze
   if (isCompleted) {
     return <Navigate to="/analyze" />;
   }
   
-  // Updated steps array - removed WorkoutFrequencyStep, BasicInfoStep, and GoalSelectionStep
   const steps = [
     { id: 'welcome', component: WelcomeStep },
     { id: 'weight-setup', component: WeightSetupStep },
@@ -46,13 +42,11 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
-    // For the weight setup step, we need to validate selection before proceeding
     if (currentStep === 1 && (!userDetails.currentWeight || !userDetails.targetWeight)) {
       toast.error("Please enter your current and target weights to continue");
       return;
     }
     
-    // For the timeline activity step, validate selection before proceeding
     if (currentStep === 2 && (!userDetails.goalTimelineMonths || !userDetails.activityLevel)) {
       toast.error("Please complete both sections before continuing");
       return;
@@ -70,7 +64,6 @@ const OnboardingWizard = () => {
   };
   
   const handleComplete = () => {
-    // Set the protein target directly from userDetails
     if (userDetails.proteinTarget) {
       setProteinTarget(userDetails.proteinTarget);
       setIsCompleted(true);
@@ -100,7 +93,6 @@ const OnboardingWizard = () => {
             </div>
           </div>
           
-          {/* Conditional rendering of components based on step */}
           <CurrentStepComponent 
             userDetails={userDetails}
             updateUserDetails={updateUserDetails}
@@ -126,8 +118,11 @@ const OnboardingWizard = () => {
                 Continue
               </Button>
             ) : (
-              <Button onClick={handleComplete}>
-                Start Analyzing Your Fridge
+              <Button 
+                onClick={handleComplete}
+                className="w-full py-3 text-lg rounded-full bg-black text-white hover:bg-black/90"
+              >
+                Let's get started!
               </Button>
             )}
           </div>
