@@ -24,9 +24,14 @@ const OnboardingWizard = () => {
   const { calculateProteinNeeds, setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
   
-  // If onboarding is already completed, redirect to home
+  // Reset to first step when component mounts
+  useEffect(() => {
+    setCurrentStep(0);
+  }, [setCurrentStep]);
+  
+  // If onboarding is already completed, redirect to analyze
   if (isCompleted) {
-    return <Navigate to="/" />;
+    return <Navigate to="/analyze" />;
   }
   
   const steps = [
