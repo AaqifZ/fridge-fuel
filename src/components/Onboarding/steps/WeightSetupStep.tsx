@@ -18,6 +18,10 @@ interface WeightSetupStepProps {
 const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUserDetails }) => {
   const [useKg, setUseKg] = useState<boolean>(userDetails.weightUnit === 'lbs' ? false : true);
   
+  // State to track slider value percentages for dumbbell positioning
+  const [currentWeightPercent, setCurrentWeightPercent] = useState(0);
+  const [targetWeightPercent, setTargetWeightPercent] = useState(0);
+  
   // Initialize weights with defaults if not set
   useEffect(() => {
     const defaultCurrentWeight = useKg ? 70 : 154;
@@ -40,6 +44,16 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
       updateUserDetails({ weightUnit: useKg ? 'kg' : 'lbs' });
     }
   }, []);
+
+  // Update percentage positions whenever weights or min/max change
+  useEffect(() => {
+    if (userDetails.currentWeight) {
+      setCurrentWeightPercent(calculatePercentage(userDetails.currentWeight));
+    }
+    if (userDetails.targetWeight) {
+      setTargetWeightPercent(calculatePercentage(userDetails.targetWeight));
+    }
+  }, [userDetails.currentWeight, userDetails.targetWeight, useKg]);
   
   // Toggle between kg and lbs
   const handleUnitToggle = (checked: boolean) => {
@@ -61,6 +75,14 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
       // Always set target weight to current weight + 7 units
       updateUserDetails({ targetWeight: newCurrentWeight + 7 });
     }
+  };
+  
+  // Calculate percentage position for dumbbell
+  const calculatePercentage = (weight: number) => {
+    const minWeight = useKg ? 55 : 121;  // 55kg or 121lbs
+    const maxWeight = useKg ? 130 : 286; // 130kg or 286lbs (130kg converted to lbs)
+    
+    return ((weight - minWeight) / (maxWeight - minWeight)) * 100;
   };
   
   // Handle weight changes from slider or direct input
@@ -118,17 +140,19 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
             </div>
           </div>
           
-          <div className="relative">
+          <div className="relative py-4">
             <Slider
               value={[userDetails.currentWeight || 0]}
               min={minWeight}
               max={maxWeight}
               step={1}
               onValueChange={(values) => handleWeightChange('current', values[0])}
-              className="py-4"
             />
-            <div className="absolute top-1/2 left-[var(--slider-thumb-position,0%)] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-              <Dumbbell className="h-5 w-5 text-primary" />
+            <div 
+              className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10"
+              style={{ left: `${currentWeightPercent}%` }}
+            >
+              <Dumbbell className="h-6 w-6 text-primary -translate-x-1/2" />
             </div>
           </div>
           
@@ -154,17 +178,19 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
             </div>
           </div>
           
-          <div className="relative">
+          <div className="relative py-4">
             <Slider
               value={[userDetails.targetWeight || 0]}
               min={minWeight}
               max={maxWeight}
               step={1}
               onValueChange={(values) => handleWeightChange('target', values[0])}
-              className="py-4"
             />
-            <div className="absolute top-1/2 left-[var(--slider-thumb-position,0%)] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-              <Dumbbell className="h-5 w-5 text-primary" />
+            <div 
+              className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10"
+              style={{ left: `${targetWeightPercent}%` }}
+            >
+              <Dumbbell className="h-6 w-6 text-primary -translate-x-1/2" />
             </div>
           </div>
           
