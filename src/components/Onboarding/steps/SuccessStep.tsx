@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Camera, CircleCheck, Scale } from 'lucide-react';
-import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 
 interface SuccessStepProps {
   userDetails: {
@@ -16,7 +15,6 @@ interface SuccessStepProps {
 }
 
 const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
-  const { proteinTarget } = useProteinCalculator();
   const weightUnit = userDetails.weightUnit || 'kg';
   
   return (
@@ -30,10 +28,10 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
       <h2 className="text-2xl font-bold">You're All Set!</h2>
       
       <div className="space-y-4">
-        {/* Protein Target */}
+        {/* Protein Target - Using userDetails.proteinTarget directly */}
         <div>
           <p className="text-lg font-medium">Your Daily Protein Target</p>
-          <p className="text-3xl font-bold text-primary mt-1">{proteinTarget}g</p>
+          <p className="text-3xl font-bold text-primary mt-1">{userDetails.proteinTarget}g</p>
         </div>
         
         {/* Weight Goal */}

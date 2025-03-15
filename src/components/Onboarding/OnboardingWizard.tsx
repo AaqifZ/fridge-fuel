@@ -70,7 +70,7 @@ const OnboardingWizard = () => {
   };
   
   const handleComplete = () => {
-    // Set the protein target from the goalSetup step directly
+    // Set the protein target directly from userDetails
     if (userDetails.proteinTarget) {
       setProteinTarget(userDetails.proteinTarget);
       setIsCompleted(true);
