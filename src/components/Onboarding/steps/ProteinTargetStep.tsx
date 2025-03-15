@@ -127,8 +127,10 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     // Adjust goal date based on protein adjustment if we have a base goal date
     if (baseGoalDate && userDetails.goalTimelineMonths) {
       // Calculate a factor to modify the timeline based on protein adjustment
-      // More protein = faster progress, less protein = slower progress
-      const timelineAdjustmentFactor = 1 - (percentageChange / 100);
+      // FIXED LOGIC: More protein = faster progress (shorter timeline), less protein = slower progress (longer timeline)
+      // Negative percentage (less protein) should increase timeline factor (slow down progress)
+      // Positive percentage (more protein) should decrease timeline factor (speed up progress)
+      const timelineAdjustmentFactor = 1 + (percentageChange * -0.01);
       
       // Calculate new timeline in days
       const baseTimelineDays = userDetails.goalTimelineMonths * 30; // approximate
