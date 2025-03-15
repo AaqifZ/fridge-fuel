@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Check, Pencil, Camera } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -213,6 +214,15 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
     }
   };
   
+  // Generate more specific social proof message with percentages
+  const getDetailedSocialProofMessage = () => {
+    if (isGain) {
+      return `Join 847 others who gained ${weightDifference}${weightUnit}+ in ${userDetails.goalTimelineMonths || 3} months`;
+    } else {
+      return `92% of users hit their target following this plan`;
+    }
+  };
+  
   return (
     <div className="text-center space-y-4">
       <div className="flex justify-center">
@@ -236,6 +246,10 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
       </div>
       
       <div className="text-sm italic text-secondary-foreground font-medium">
+        {getDetailedSocialProofMessage()}
+      </div>
+      
+      <div className="text-sm text-secondary-foreground font-medium">
         {getSocialProofMessage()}
       </div>
       
@@ -292,6 +306,10 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
             </CardContent>
           </Card>
         </div>
+      </div>
+      
+      <div className="mt-3 text-sm text-primary font-medium">
+        Your first recommendation is 60 seconds away
       </div>
     </div>
   );

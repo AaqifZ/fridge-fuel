@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -76,9 +75,7 @@ const OnboardingWizard = () => {
     }
   };
   
-  // Calculate which step indicators should be filled
-  // Note: We show steps 1-4 (not including welcome step)
-  const totalStepsShown = steps.length - 1; // Exclude welcome step
+  const totalStepsShown = steps.length - 1;
   const currentVisibleStep = currentStep === 0 ? 1 : currentStep;
   
   return (
