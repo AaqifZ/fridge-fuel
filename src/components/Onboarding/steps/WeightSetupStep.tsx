@@ -19,12 +19,22 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
   
   // Initialize weights with defaults if not set
   useEffect(() => {
+    const defaultCurrentWeight = useKg ? 70 : 154;
+    // If current weight not set, set it and calculate target weight
     if (!userDetails.currentWeight) {
-      updateUserDetails({ currentWeight: useKg ? 70 : 154 });
+      const currentWeight = defaultCurrentWeight;
+      const targetWeight = currentWeight + 7; // Add 7 kg or 7 lbs by default for bulking
+      updateUserDetails({ 
+        currentWeight: currentWeight,
+        targetWeight: targetWeight
+      });
+    } 
+    // If only target weight not set, calculate based on current
+    else if (!userDetails.targetWeight && userDetails.currentWeight) {
+      const targetWeight = userDetails.currentWeight + 7;
+      updateUserDetails({ targetWeight: targetWeight });
     }
-    if (!userDetails.targetWeight) {
-      updateUserDetails({ targetWeight: useKg ? 65 : 143 });
-    }
+    
     if (!userDetails.weightUnit) {
       updateUserDetails({ weightUnit: useKg ? 'kg' : 'lbs' });
     }
@@ -37,31 +47,18 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
     
     // Convert weights when switching units
     if (userDetails.currentWeight) {
+      let newCurrentWeight;
       if (checked) {
         // Convert lbs to kg
-        updateUserDetails({ 
-          currentWeight: Math.round(userDetails.currentWeight * 0.453592) 
-        });
+        newCurrentWeight = Math.round(userDetails.currentWeight * 0.453592);
       } else {
         // Convert kg to lbs
-        updateUserDetails({ 
-          currentWeight: Math.round(userDetails.currentWeight * 2.20462) 
-        });
+        newCurrentWeight = Math.round(userDetails.currentWeight * 2.20462);
       }
-    }
-    
-    if (userDetails.targetWeight) {
-      if (checked) {
-        // Convert lbs to kg
-        updateUserDetails({ 
-          targetWeight: Math.round(userDetails.targetWeight * 0.453592) 
-        });
-      } else {
-        // Convert kg to lbs
-        updateUserDetails({ 
-          targetWeight: Math.round(userDetails.targetWeight * 2.20462) 
-        });
-      }
+      updateUserDetails({ currentWeight: newCurrentWeight });
+      
+      // Always set target weight to current weight + 7 units
+      updateUserDetails({ targetWeight: newCurrentWeight + 7 });
     }
   };
   
@@ -69,6 +66,8 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
   const handleWeightChange = (type: 'current' | 'target', value: number) => {
     if (type === 'current') {
       updateUserDetails({ currentWeight: value });
+      // Update target weight when current weight changes (if not manually set)
+      updateUserDetails({ targetWeight: value + 7 });
     } else {
       updateUserDetails({ targetWeight: value });
     }
