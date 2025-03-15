@@ -15,17 +15,20 @@ const Index: React.FC = () => {
     navigate('/onboarding');
   };
 
+  // Add console log to track component rendering
+  console.log("Index component rendering");
+
   return (
-    <div className="relative min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-hidden">
       {/* Language selector */}
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-6 right-6 z-10">
         <button className="px-3 py-1 text-sm font-medium text-gray-700 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors">
           EN
         </button>
       </div>
       
       {/* Main content */}
-      <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10">
+      <main className="flex flex-col items-center justify-center min-h-screen px-5 py-10">
         {/* App logo */}
         <h2 className="font-bold text-4xl text-[#1EAEDB] mb-8">BulkAI</h2>
         
@@ -70,7 +73,7 @@ const Index: React.FC = () => {
             </p>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
