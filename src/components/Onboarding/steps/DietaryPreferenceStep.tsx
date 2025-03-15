@@ -1,12 +1,16 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Beef, Fish, Leaf, Carrot } from 'lucide-react';
+import { Beef, Fish, Leaf, Carrot, Ban, CheckCircle2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 
 interface DietaryPreferenceStepProps {
   userDetails: {
     dietaryPreference?: 'classic' | 'pescatarian' | 'vegetarian' | 'vegan';
+    glutenFree?: boolean;
+    dairyFree?: boolean;
   };
   updateUserDetails: (details: Partial<DietaryPreferenceStepProps['userDetails']>) => void;
 }
@@ -19,9 +23,6 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
     <div className="space-y-6">
       <div className="text-center mb-4">
         <h2 className="text-2xl font-bold">Your Dietary Preference</h2>
-        <p className="text-muted-foreground mt-1">
-          This helps us tailor your protein recommendations to your eating style
-        </p>
       </div>
       
       <div className="p-4 bg-muted/50 rounded-lg text-sm mb-6">
@@ -83,6 +84,45 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
           </div>
         </div>
       </RadioGroup>
+      
+      {/* Additional dietary restrictions */}
+      <div className="mt-6 border-t pt-5">
+        <h3 className="font-medium mb-3">Additional dietary restrictions</h3>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between bg-muted/30 p-3 rounded-lg">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 rounded-full bg-red-100 p-1.5 mr-3">
+                <Ban className="h-5 w-5 text-red-500" />
+              </div>
+              <div>
+                <p className="font-medium">Gluten-free</p>
+                <p className="text-sm text-muted-foreground">Avoid all gluten-containing ingredients</p>
+              </div>
+            </div>
+            <Switch 
+              checked={userDetails.glutenFree || false}
+              onCheckedChange={(checked) => updateUserDetails({ glutenFree: checked })}
+            />
+          </div>
+          
+          <div className="flex items-center justify-between bg-muted/30 p-3 rounded-lg">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 rounded-full bg-blue-100 p-1.5 mr-3">
+                <Ban className="h-5 w-5 text-blue-500" />
+              </div>
+              <div>
+                <p className="font-medium">Dairy-free</p>
+                <p className="text-sm text-muted-foreground">Avoid all milk-based ingredients</p>
+              </div>
+            </div>
+            <Switch 
+              checked={userDetails.dairyFree || false}
+              onCheckedChange={(checked) => updateUserDetails({ dairyFree: checked })}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

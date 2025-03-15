@@ -20,6 +20,8 @@ interface OnboardingState {
     goalTimelineMonths?: number;
     goalDate?: string;
     dietaryPreference?: 'classic' | 'pescatarian' | 'vegetarian' | 'vegan';
+    glutenFree?: boolean;
+    dairyFree?: boolean;
   };
   setIsCompleted: (value: boolean) => void;
   setCurrentStep: (step: number) => void;
@@ -49,7 +51,7 @@ export const useOnboarding = create<OnboardingState>()(
     {
       name: 'onboarding-storage',
       // Update version number to force refresh of existing storage
-      version: 16,
+      version: 17,
     }
   )
 );
