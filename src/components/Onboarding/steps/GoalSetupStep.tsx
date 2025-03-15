@@ -20,23 +20,14 @@ const GoalSetupStep: React.FC<GoalSetupStepProps> = ({ userDetails, updateUserDe
   const [useKg, setUseKg] = useState<boolean>(userDetails.weightUnit === 'lbs' ? false : true);
   const [proteinMultiplier, setProteinMultiplier] = useState<number>(1.8);
   
-  // Define weight range based on units
-  const minWeight = useKg ? 45 : 100;
-  const maxWeight = useKg ? 160 : 350;
-  
   // Initialize weights with defaults if not set
   useEffect(() => {
-    const defaultCurrentWeight = useKg ? 70 : 154;
-    const defaultTargetWeight = useKg ? 77 : 170;
-    
     if (!userDetails.currentWeight) {
-      updateUserDetails({ currentWeight: defaultCurrentWeight });
+      updateUserDetails({ currentWeight: useKg ? 70 : 154 });
     }
-    
     if (!userDetails.targetWeight) {
-      updateUserDetails({ targetWeight: defaultTargetWeight });
+      updateUserDetails({ targetWeight: useKg ? 65 : 143 });
     }
-    
     if (!userDetails.weightUnit) {
       updateUserDetails({ weightUnit: useKg ? 'kg' : 'lbs' });
     }
@@ -60,19 +51,31 @@ const GoalSetupStep: React.FC<GoalSetupStepProps> = ({ userDetails, updateUserDe
     
     // Convert weights when switching units
     if (userDetails.currentWeight) {
-      const newCurrentWeight = checked 
-        ? Math.round(userDetails.currentWeight * 0.453592) // lbs to kg
-        : Math.round(userDetails.currentWeight * 2.20462); // kg to lbs
-      
-      updateUserDetails({ currentWeight: newCurrentWeight });
+      if (checked) {
+        // Convert lbs to kg
+        updateUserDetails({ 
+          currentWeight: Math.round(userDetails.currentWeight * 0.453592) 
+        });
+      } else {
+        // Convert kg to lbs
+        updateUserDetails({ 
+          currentWeight: Math.round(userDetails.currentWeight * 2.20462) 
+        });
+      }
     }
     
     if (userDetails.targetWeight) {
-      const newTargetWeight = checked 
-        ? Math.round(userDetails.targetWeight * 0.453592) // lbs to kg
-        : Math.round(userDetails.targetWeight * 2.20462); // kg to lbs
-      
-      updateUserDetails({ targetWeight: newTargetWeight });
+      if (checked) {
+        // Convert lbs to kg
+        updateUserDetails({ 
+          targetWeight: Math.round(userDetails.targetWeight * 0.453592) 
+        });
+      } else {
+        // Convert kg to lbs
+        updateUserDetails({ 
+          targetWeight: Math.round(userDetails.targetWeight * 2.20462) 
+        });
+      }
     }
   };
   
@@ -89,27 +92,11 @@ const GoalSetupStep: React.FC<GoalSetupStepProps> = ({ userDetails, updateUserDe
     }
   };
   
-  // Handle weight changes
+  // Handle input changes
   const handleWeightChange = (type: 'current' | 'target', value: number) => {
-    if (isNaN(value) || value < minWeight) {
-      value = minWeight;
-    } else if (value > maxWeight) {
-      value = maxWeight;
-    }
-    
     if (type === 'current') {
       updateUserDetails({ currentWeight: value });
-      
-      // Update target weight if it's less than current weight
-      if (userDetails.targetWeight && userDetails.targetWeight <= value) {
-        updateUserDetails({ targetWeight: value + (useKg ? 5 : 10) });
-      }
     } else {
-      // Ensure target weight is greater than current weight
-      if (userDetails.currentWeight && value <= userDetails.currentWeight) {
-        value = userDetails.currentWeight + (useKg ? 1 : 2);
-      }
-      
       updateUserDetails({ targetWeight: value });
     }
   };
@@ -122,9 +109,9 @@ const GoalSetupStep: React.FC<GoalSetupStepProps> = ({ userDetails, updateUserDe
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Set Your Protein Target</h2>
+        <h2 className="text-2xl font-bold">Set Your Weight Goals</h2>
         <p className="text-muted-foreground mt-1">
-          We'll use this to customize your daily protein intake
+          We'll use this to customize your daily protein target
         </p>
       </div>
       
@@ -150,11 +137,9 @@ const GoalSetupStep: React.FC<GoalSetupStepProps> = ({ userDetails, updateUserDe
             <Input
               id="current-weight"
               type="number"
-              value={userDetails.currentWeight || minWeight}
-              onChange={(e) => handleWeightChange('current', parseFloat(e.target.value))}
+              value={userDetails.currentWeight || ''}
+              onChange={(e) => handleWeightChange('current', parseFloat(e.target.value) || 0)}
               className="text-lg"
-              min={minWeight}
-              max={maxWeight}
             />
             <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
           </div>
@@ -167,11 +152,9 @@ const GoalSetupStep: React.FC<GoalSetupStepProps> = ({ userDetails, updateUserDe
             <Input
               id="target-weight"
               type="number"
-              value={userDetails.targetWeight || (userDetails.currentWeight ? userDetails.currentWeight + (useKg ? 5 : 10) : minWeight)}
-              onChange={(e) => handleWeightChange('target', parseFloat(e.target.value))}
+              value={userDetails.targetWeight || ''}
+              onChange={(e) => handleWeightChange('target', parseFloat(e.target.value) || 0)}
               className="text-lg"
-              min={minWeight}
-              max={maxWeight}
             />
             <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
           </div>
