@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Check, Pencil, Camera } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,7 +17,6 @@ interface SuccessStepProps {
   updateUserDetails: (details: Partial<SuccessStepProps['userDetails']>) => void;
 }
 
-// Create a reusable circular progress component for the nutrition stats
 const CircularProgress = ({ 
   label, 
   value, 
@@ -34,9 +32,8 @@ const CircularProgress = ({
   percentage?: number;
   onAdjust?: (newValue: number) => void;
 }) => {
-  // SVG circle properties
-  const size = 80; // Reduced from 100 for better consistency
-  const strokeWidth = 3; // Reduced from 4 for better proportions
+  const size = 80;
+  const strokeWidth = 3;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -52,7 +49,6 @@ const CircularProgress = ({
     if (!onAdjust) return;
     
     if (isEditing) {
-      // Save the value
       onAdjust(editValue);
     }
     setIsEditing(!isEditing);
@@ -71,7 +67,6 @@ const CircularProgress = ({
         {label}
       </p>
       <div className="relative flex items-center justify-center">
-        {/* Background circle */}
         <svg width={size} height={size} className="transform -rotate-90">
           <circle
             cx={size / 2}
@@ -81,7 +76,6 @@ const CircularProgress = ({
             stroke="hsl(var(--muted))"
             strokeWidth={strokeWidth}
           />
-          {/* Progress circle */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -94,7 +88,6 @@ const CircularProgress = ({
             strokeLinecap="round"
           />
         </svg>
-        {/* Center text */}
         <div className="absolute text-center">
           {isEditing && onAdjust ? (
             <input
@@ -118,7 +111,6 @@ const CircularProgress = ({
             <span className="text-sm font-semibold">{value}{unit}</span>
           )}
         </div>
-        {/* Edit icon */}
         {onAdjust && (
           <div className="absolute bottom-0 right-0">
             <Pencil 
@@ -137,24 +129,20 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const weightUnit = userDetails.weightUnit || 'kg';
   const [proteinTarget, setProteinTarget] = useState(userDetails.proteinTarget || 0);
   
-  // Calculate weight difference
   const currentWeight = userDetails.currentWeight || 0;
   const targetWeight = userDetails.targetWeight || 0;
   const weightDifference = Math.abs(targetWeight - currentWeight);
   const isGain = targetWeight > currentWeight;
   
-  // Use the goal date from userDetails, or fall back to a computed date if not available
   const targetDate = userDetails.goalDate || 
     (userDetails.goalTimelineMonths ? 
       format(new Date(new Date().setMonth(new Date().getMonth() + (userDetails.goalTimelineMonths || 3))), 'MMM d') : 
       'N/A');
   
-  // Calculate estimated nutrition values based on protein target
   const [calories, setCalories] = useState(Math.round(proteinTarget * 24));
   const [carbs, setCarbs] = useState(Math.round(calories * 0.4 / 4));
   const [fats, setFats] = useState(Math.round(calories * 0.3 / 9));
   
-  // Update macros when protein changes
   useEffect(() => {
     const newCalories = Math.round(proteinTarget * 24);
     setCalories(newCalories);
@@ -162,40 +150,32 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
     setFats(Math.round(newCalories * 0.3 / 9));
   }, [proteinTarget]);
   
-  // Handle protein adjustment
   const handleProteinAdjust = (newValue: number) => {
     setProteinTarget(newValue);
   };
   
-  // Handle carbs adjustment
   const handleCarbsAdjust = (newValue: number) => {
     const carbCalories = newValue * 4;
     const proteinCalories = proteinTarget * 4;
     const remainingCalories = calories - carbCalories - proteinCalories;
     
-    // Ensure minimum fat calories (at least 10% of total)
-    const minFatCalories = calories * 0.1;
-    if (remainingCalories < minFatCalories) return;
+    if (remainingCalories < 0) return;
     
     setCarbs(newValue);
     setFats(Math.round(remainingCalories / 9));
   };
   
-  // Handle fats adjustment
   const handleFatsAdjust = (newValue: number) => {
     const fatCalories = newValue * 9;
     const proteinCalories = proteinTarget * 4;
     const remainingCalories = calories - fatCalories - proteinCalories;
     
-    // Ensure minimum carb calories (at least 20% of total)
-    const minCarbCalories = calories * 0.2;
-    if (remainingCalories < minCarbCalories) return;
+    if (remainingCalories < 0) return;
     
     setFats(newValue);
     setCarbs(Math.round(remainingCalories / 4));
   };
   
-  // Generate social proof message based on weight goal
   const getSocialProofMessage = () => {
     const baseMessage = "You're joining 10,000+ others with similar goals";
     
@@ -214,7 +194,6 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
     }
   };
   
-  // Generate more specific social proof message with percentages
   const getDetailedSocialProofMessage = () => {
     if (isGain) {
       return `Join 847 others who gained ${weightDifference}${weightUnit}+ in ${userDetails.goalTimelineMonths || 3} months`;
@@ -245,11 +224,11 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
         </div>
       </div>
       
-      <div className="text-sm italic text-secondary-foreground font-medium">
+      <div className="text-sm italic text-muted-foreground">
         {getDetailedSocialProofMessage()}
       </div>
       
-      <div className="text-sm text-secondary-foreground font-medium">
+      <div className="text-sm text-muted-foreground">
         {getSocialProofMessage()}
       </div>
       
