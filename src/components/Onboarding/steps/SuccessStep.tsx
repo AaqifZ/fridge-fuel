@@ -177,24 +177,6 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   };
   
   const getSocialProofMessage = () => {
-    const baseMessage = "You're joining 10,000+ others with similar goals";
-    
-    if (isGain) {
-      if (weightDifference > 10) {
-        return `${baseMessage} building serious muscle mass!`;
-      } else {
-        return `${baseMessage} on their muscle building journey!`;
-      }
-    } else {
-      if (weightDifference > 10) {
-        return `${baseMessage} on their transformation journey!`;
-      } else {
-        return `${baseMessage} in their fitness journey!`;
-      }
-    }
-  };
-  
-  const getDetailedSocialProofMessage = () => {
     if (isGain) {
       return `Join 847 others who gained ${weightDifference}${weightUnit}+ in ${userDetails.goalTimelineMonths || 3} months`;
     } else {
@@ -225,10 +207,6 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
       </div>
       
       <div className="text-sm italic text-muted-foreground">
-        {getDetailedSocialProofMessage()}
-      </div>
-      
-      <div className="text-sm text-muted-foreground">
         {getSocialProofMessage()}
       </div>
       
