@@ -44,7 +44,7 @@ const Index: React.FC = () => {
           
           <div className="text-center pt-3">
             <p className="text-muted-foreground">
-              Purchased on the web? <a href="#" className="text-black font-semibold">Sign In</a>
+              Hit your daily protein target, without breaking the bank
             </p>
           </div>
         </div>
