@@ -9,7 +9,7 @@ interface BasicInfoStepProps {
     weight?: number;
     height?: number;
     age?: number;
-    gender?: 'male' | 'female';
+    gender?: 'male' | 'female' | 'other';
   };
   updateUserDetails: (details: Partial<BasicInfoStepProps['userDetails']>) => void;
 }
@@ -62,19 +62,12 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ userDetails, updateUserDe
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="gender">Gender</Label>
-            <Select
-              value={userDetails.gender}
-              onValueChange={(value) => updateUserDetails({ gender: value as 'male' | 'female' })}
-            >
-              <SelectTrigger id="gender">
-                <SelectValue placeholder="Select gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="gender">Selected Gender</Label>
+            <div className="p-2 rounded-md bg-secondary/20 text-sm font-medium">
+              {userDetails.gender === 'male' ? 'Male' : 
+               userDetails.gender === 'female' ? 'Female' : 
+               userDetails.gender === 'other' ? 'Other' : 'Not selected'}
+            </div>
           </div>
         </div>
       </div>

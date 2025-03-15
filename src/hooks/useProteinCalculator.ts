@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -11,7 +12,7 @@ interface ProteinCalculatorState {
     weight: number,
     height: number,
     age: number,
-    gender: 'male' | 'female',
+    gender: 'male' | 'female' | 'other',
     activityLevel: string,
     goal: string
   ) => number;
@@ -34,7 +35,7 @@ export const useProteinCalculator = create<ProteinCalculatorState>()(
         weight: number,
         height: number,
         age: number,
-        gender: 'male' | 'female',
+        gender: 'male' | 'female' | 'other',
         activityLevel: string,
         goal: string
       ) => {
@@ -42,8 +43,13 @@ export const useProteinCalculator = create<ProteinCalculatorState>()(
         let bmr;
         if (gender === 'male') {
           bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-        } else {
+        } else if (gender === 'female') {
           bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+        } else {
+          // For 'other', we'll use an average of the male and female equations
+          const maleBmr = 10 * weight + 6.25 * height - 5 * age + 5;
+          const femaleBmr = 10 * weight + 6.25 * height - 5 * age - 161;
+          bmr = (maleBmr + femaleBmr) / 2;
         }
         
         // Activity multiplier

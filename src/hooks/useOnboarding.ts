@@ -9,7 +9,7 @@ interface OnboardingState {
     weight?: number;
     height?: number;
     age?: number;
-    gender?: 'male' | 'female';
+    gender?: 'male' | 'female' | 'other';
     activityLevel?: string;
     goal?: string;
   };

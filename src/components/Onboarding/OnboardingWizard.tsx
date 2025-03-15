@@ -5,6 +5,7 @@ import { useOnboarding } from '@/hooks/useOnboarding';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import WelcomeStep from './steps/WelcomeStep';
+import GenderSelectionStep from './steps/GenderSelectionStep';
 import BasicInfoStep from './steps/BasicInfoStep';
 import GoalSelectionStep from './steps/GoalSelectionStep';
 import SuccessStep from './steps/SuccessStep';
@@ -30,6 +31,7 @@ const OnboardingWizard = () => {
   
   const steps = [
     { id: 'welcome', component: WelcomeStep },
+    { id: 'gender', component: GenderSelectionStep },
     { id: 'basic-info', component: BasicInfoStep },
     { id: 'goal', component: GoalSelectionStep },
     { id: 'success', component: SuccessStep },
@@ -38,6 +40,12 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
+    // For the gender step, we need to validate selection before proceeding
+    if (currentStep === 1 && !userDetails.gender) {
+      toast.error("Please select your gender to continue");
+      return;
+    }
+    
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     }
@@ -94,11 +102,12 @@ const OnboardingWizard = () => {
           <CurrentStepComponent 
             userDetails={userDetails}
             updateUserDetails={updateUserDetails}
+            onBack={currentStep > 0 ? handleBack : undefined}
           />
         </div>
         
         <div className="flex justify-between mt-8">
-          {currentStep > 0 && (
+          {currentStep > 0 && currentStep !== 1 && (
             <Button 
               variant="outline" 
               onClick={handleBack}
@@ -107,10 +116,13 @@ const OnboardingWizard = () => {
             </Button>
           )}
           
-          <div className="ml-auto">
+          <div className={`${currentStep > 0 && currentStep !== 1 ? 'ml-auto' : 'w-full'}`}>
             {currentStep < steps.length - 1 ? (
-              <Button onClick={handleNext}>
-                Continue
+              <Button 
+                onClick={handleNext} 
+                className={currentStep === 1 ? "w-full py-3 text-lg rounded-full" : ""}
+              >
+                {currentStep === 1 ? "Continue" : "Continue"}
               </Button>
             ) : (
               <Button onClick={handleComplete}>
