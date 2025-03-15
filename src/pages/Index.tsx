@@ -3,12 +3,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Camera, ChevronRight } from 'lucide-react';
+import { useOnboarding } from '@/hooks/useOnboarding';
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
+  const { isCompleted } = useOnboarding();
   
   const handleGetStarted = () => {
-    navigate('/onboarding');
+    if (isCompleted) {
+      navigate('/analyze');
+    } else {
+      navigate('/onboarding');
+    }
   };
 
   return (
