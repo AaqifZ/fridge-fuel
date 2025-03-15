@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
+import { Camera, ChevronRight } from 'lucide-react';
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
@@ -13,36 +13,41 @@ const Index: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-white to-blue-50">
-      {/* Language selector in top right - improved position and styling */}
+      {/* Language selector in top right */}
       <div className="absolute top-6 right-6">
         <button className="px-3 py-1 text-sm font-medium text-gray-600 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors">
           EN
         </button>
       </div>
       
-      {/* Main content - better vertical distribution */}
+      {/* Main content */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 pb-10">
         {/* App logo/brand */}
         <div className="mb-6">
           <div className="font-bold text-2xl text-primary">BulkAI</div>
         </div>
         
-        {/* Hero image - smaller, more relevant */}
-        <div className="relative w-48 h-48 mb-8">
+        {/* Hero image - now showing fridge/ingredient scanning concept */}
+        <div className="relative w-56 h-56 mb-8">
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="w-16 h-16 bg-primary/90 rounded-full flex items-center justify-center">
+              <Camera className="w-8 h-8 text-white" />
+            </div>
+          </div>
           <img 
-            src="https://images.unsplash.com/photo-1490645935967-10de6ba17061" 
-            alt="Protein-rich food" 
+            src="https://images.unsplash.com/photo-1606857521015-7f9fcf423740" 
+            alt="Refrigerator with ingredients" 
             className="w-full h-full object-cover rounded-2xl shadow-lg"
           />
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/30 to-transparent"></div>
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/40 to-transparent"></div>
         </div>
         
         <h1 className="text-4xl md:text-5xl font-bold text-center tracking-tight text-gray-900 mb-3">
-          Protein Made Simple
+          Scan. Cook. Gain.
         </h1>
         
         <p className="text-xl text-center mb-10 max-w-md text-gray-700">
-          Easy recipes to hit your protein goals without breaking the bank
+          Snap a photo of your fridge and get tailored high-protein recipes in seconds
         </p>
         
         <div className="w-full max-w-md space-y-4 px-4">
@@ -50,12 +55,12 @@ const Index: React.FC = () => {
             className="w-full py-6 text-lg rounded-full bg-primary text-white hover:bg-primary/90 flex items-center justify-center gap-2 shadow-md"
             onClick={handleGetStarted}
           >
-            Start Cooking <ChevronRight size={20} />
+            Snap Your Fridge <ChevronRight size={20} />
           </Button>
           
           <div className="text-center pt-2">
             <p className="text-sm text-gray-500">
-              Join thousands of fitness enthusiasts who save money while eating better
+              Join athletes and fitness enthusiasts saving time while hitting their protein goals
             </p>
           </div>
         </div>
