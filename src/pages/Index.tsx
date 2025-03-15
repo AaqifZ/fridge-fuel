@@ -5,24 +5,27 @@ import { ChevronRight, Camera } from 'lucide-react';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import Button from '@/components/Button';
 
-const Index: React.FC = () => {
+const Index = () => {
   const navigate = useNavigate();
   const { resetOnboarding } = useOnboarding();
   
   useEffect(() => {
-    // Log component mounting for debugging
     console.log("Index component mounted");
+    
+    // Log the DOM structure to debug
+    const rootElement = document.getElementById('root');
+    console.log("Root element children count:", rootElement?.childElementCount);
+    
     return () => console.log("Index component unmounted");
   }, []);
   
   const handleGetStarted = () => {
-    console.log("Directing user to onboarding");
     resetOnboarding();
     navigate('/onboarding');
   };
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden" id="index-container">
+    <div className="min-h-screen bg-white">
       {/* Language selector */}
       <div className="absolute top-6 right-6 z-10">
         <button className="px-3 py-1 text-sm font-medium text-gray-700 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors">

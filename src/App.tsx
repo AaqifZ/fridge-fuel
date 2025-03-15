@@ -14,44 +14,41 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import OnboardingWizard from "./components/Onboarding/OnboardingWizard";
 
-// Create a new QueryClient instance outside of the component to prevent recreation on renders
+// Create a singleton QueryClient instance
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Add an ID to the app container for debugging
+  console.log("App component rendering");
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner position="top-center" />
-        <div id="app-container">
-          <BrowserRouter>
-            <AppContent />
-          </BrowserRouter>
-        </div>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   );
 };
 
-// Separate component to access routing inside useEffect
-const AppContent = () => {
+// Separate component to handle routing
+const AppRoutes = () => {
   const { isCompleted } = useOnboarding();
   const location = useLocation();
   
   // Hide navbar on index page and onboarding
   const showNavbar = location.pathname !== '/' && location.pathname !== '/onboarding';
   
-  // Debug mounting
   useEffect(() => {
-    console.log("AppContent mounted, path:", location.pathname);
-    return () => console.log("AppContent unmounted");
+    console.log("Current route:", location.pathname);
   }, [location.pathname]);
   
   return (
     <>
       {showNavbar && <Navbar />}
-      <div className="relative z-0">
+      <div className="app-content">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route 

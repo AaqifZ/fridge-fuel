@@ -4,41 +4,31 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// To prevent any chance of double mounting, use a more reliable approach
-let hasRendered = false;
-
-const renderApp = () => {
-  if (hasRendered) {
-    console.warn("App has already been rendered! Preventing duplicate rendering.");
-    return;
-  }
-
+// Ensure the app is only mounted once
+const mountApp = () => {
+  console.log("Attempting to mount app...");
+  
   const rootElement = document.getElementById("root");
   if (!rootElement) {
     console.error("Root element not found!");
     return;
   }
-
-  // Clear any existing content to ensure clean mounting
-  rootElement.innerHTML = '';
   
-  const root = createRoot(rootElement);
-  
-  // Wrap the App component in a div with a key to force React to treat it as a unique component
-  root.render(
-    <div key="app-wrapper">
-      <App />
-    </div>
-  );
-  
-  console.log("App mounted successfully");
-  hasRendered = true;
+  // Create the React root once
+  try {
+    const root = createRoot(rootElement);
+    root.render(<App />);
+    console.log("App successfully mounted");
+  } catch (error) {
+    console.error("Failed to mount app:", error);
+  }
 };
 
-// Execute rendering after a small delay to ensure DOM is fully loaded
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', renderApp);
+// Execute only once when the DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    mountApp();
+  });
 } else {
-  // Already loaded, render immediately
-  renderApp();
+  mountApp();
 }
