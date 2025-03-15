@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Beef } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ProteinTargetStepProps {
   userDetails: {
@@ -9,24 +10,113 @@ interface ProteinTargetStepProps {
     targetWeight?: number;
     proteinTarget?: number;
     weightUnit?: 'kg' | 'lbs';
+    goalTimelineMonths?: number;
+    activityLevel?: 'sedentary' | 'moderate' | 'active';
   };
   updateUserDetails: (details: Partial<ProteinTargetStepProps['userDetails']>) => void;
 }
 
 const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, updateUserDetails }) => {
-  const [proteinMultiplier, setProteinMultiplier] = useState<number>(1.8);
+  const [calculatedProtein, setCalculatedProtein] = useState<number>(0);
+  const [proteinAdjustment, setProteinAdjustment] = useState<number>(0);
+  const [adjustmentPercentage, setAdjustmentPercentage] = useState<number>(0);
   const useKg = userDetails.weightUnit === 'kg';
   
-  // Calculate protein target whenever weight or unit changes
+  // Calculate protein target based on the formula whenever relevant values change
   useEffect(() => {
-    if (userDetails.currentWeight) {
-      const weightInKg = useKg 
+    if (userDetails.currentWeight && userDetails.targetWeight && 
+        userDetails.goalTimelineMonths && userDetails.activityLevel) {
+      
+      // Convert weights to kg if using lbs
+      const currentWeightKg = useKg 
         ? userDetails.currentWeight 
         : Math.round(userDetails.currentWeight * 0.453592);
-      const proteinGrams = Math.round(weightInKg * proteinMultiplier);
-      updateUserDetails({ proteinTarget: proteinGrams });
+        
+      const targetWeightKg = useKg
+        ? userDetails.targetWeight
+        : Math.round(userDetails.targetWeight * 0.453592);
+      
+      // Determine Activity Multiplier based on activity level
+      let activityMultiplier = 0.5; // Default to moderate
+      if (userDetails.activityLevel === 'sedentary') {
+        activityMultiplier = 0.3;
+      } else if (userDetails.activityLevel === 'active') {
+        activityMultiplier = 0.7;
+      }
+      
+      // Determine Timeline Factor based on goal timeline
+      let timelineFactor = 0.04; // Default to 6 months
+      if (userDetails.goalTimelineMonths <= 3) {
+        timelineFactor = 0.08;
+      } else if (userDetails.goalTimelineMonths >= 12) {
+        timelineFactor = 0.02;
+      }
+      
+      // Determine Activity Addition based on activity level
+      let activityAddition = 0.3; // Default to moderate
+      if (userDetails.activityLevel === 'sedentary') {
+        activityAddition = 0.1;
+      } else if (userDetails.activityLevel === 'active') {
+        activityAddition = 0.6;
+      }
+      
+      // Calculate the components
+      const baseProtein = currentWeightKg * 1.6;
+      const growthFactor = (targetWeightKg - currentWeightKg) * activityMultiplier * timelineFactor;
+      const activityAdjustment = currentWeightKg * activityAddition;
+      
+      // Calculate total and round to nearest 5g
+      let proteinTotal = baseProtein + growthFactor + activityAdjustment;
+      proteinTotal = Math.round(proteinTotal / 5) * 5; // Round to nearest 5g
+      
+      // Apply bounds (100g minimum, 250g maximum)
+      proteinTotal = Math.max(100, Math.min(250, proteinTotal));
+      
+      // Set the calculated protein value
+      setCalculatedProtein(proteinTotal);
+      
+      // Reset adjustment to zero when calculation changes
+      setProteinAdjustment(0);
+      setAdjustmentPercentage(0);
+      
+      // Update the user details with the new protein target
+      updateUserDetails({ proteinTarget: proteinTotal });
+      
+      console.log('Protein calculation:', {
+        currentWeightKg,
+        targetWeightKg,
+        activityMultiplier,
+        timelineFactor,
+        activityAddition,
+        baseProtein,
+        growthFactor,
+        activityAdjustment,
+        proteinTotal
+      });
     }
-  }, [userDetails.currentWeight, userDetails.weightUnit, proteinMultiplier]);
+  }, [userDetails.currentWeight, userDetails.targetWeight, userDetails.activityLevel, userDetails.goalTimelineMonths, userDetails.weightUnit]);
+  
+  // Handle protein adjustment slider changes
+  const handleProteinAdjustmentChange = (value: number[]) => {
+    const newAdjustment = value[0];
+    setProteinAdjustment(newAdjustment);
+    
+    const newTotal = calculatedProtein + newAdjustment;
+    updateUserDetails({ proteinTarget: newTotal });
+    
+    // Calculate percentage change from the baseline calculated value
+    const percentageChange = (newAdjustment / calculatedProtein) * 100;
+    setAdjustmentPercentage(percentageChange);
+    
+    // Show warning for large adjustments (more than ±25%)
+    if (Math.abs(percentageChange) > 25 && !adjustmentWarningShown) {
+      toast.warning("This is a significant adjustment from the recommended amount");
+      setAdjustmentWarningShown(true);
+    }
+  };
+  
+  // State to track if adjustment warning has been shown
+  const [adjustmentWarningShown, setAdjustmentWarningShown] = useState(false);
   
   // Protein visualization helper
   const getProteinVisualization = (proteinGrams: number) => {
@@ -41,17 +131,12 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     }
   };
   
-  // Handle slider changes for protein multiplier
-  const handleProteinMultiplierChange = (value: number[]) => {
-    setProteinMultiplier(value[0]);
-  };
-  
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold">Daily Protein Target</h2>
         <p className="text-muted-foreground mt-1">
-          Here's your recommended daily protein intake
+          Based on your goals, here's your recommended daily protein intake
         </p>
       </div>
       
@@ -60,7 +145,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-medium">Daily Protein Target</h3>
-            <p className="text-muted-foreground text-sm">Based on your current weight</p>
+            <p className="text-muted-foreground text-sm">Customized to your goals</p>
           </div>
           <div className="text-4xl font-bold text-primary flex items-baseline">
             {userDetails.proteinTarget || 0}
@@ -74,24 +159,32 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
           <span>{userDetails.proteinTarget ? getProteinVisualization(userDetails.proteinTarget) : ''}</span>
         </div>
         
-        {/* Protein Multiplier Adjustment */}
+        {/* Protein Target Adjustment */}
         <div className="pt-4">
           <div className="flex justify-between text-sm mb-2">
-            <span>Adjustment</span>
-            <span className="font-medium">{proteinMultiplier}g per kg</span>
+            <span>Fine-tune your target</span>
+            <span className={`font-medium ${Math.abs(adjustmentPercentage) > 25 ? 'text-orange-500' : ''}`}>
+              {proteinAdjustment > 0 ? '+' : ''}{proteinAdjustment}g 
+              {adjustmentPercentage !== 0 && ` (${adjustmentPercentage > 0 ? '+' : ''}${Math.round(adjustmentPercentage)}%)`}
+            </span>
           </div>
           <Slider
-            defaultValue={[1.8]}
-            min={1.2}
-            max={2.4}
-            step={0.1}
-            value={[proteinMultiplier]}
-            onValueChange={handleProteinMultiplierChange}
+            defaultValue={[0]}
+            min={-50}
+            max={50}
+            step={5}
+            value={[proteinAdjustment]}
+            onValueChange={handleProteinAdjustmentChange}
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-2">
             <span>Less protein</span>
             <span>More protein</span>
           </div>
+        </div>
+        
+        {/* Formula Explanation - Optional */}
+        <div className="mt-4 pt-4 border-t border-border/30 text-xs text-muted-foreground">
+          <p>This target is calculated based on your current weight, goal weight, timeline, and activity level.</p>
         </div>
       </div>
     </div>
