@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -24,9 +23,9 @@ const OnboardingWizard = () => {
   const { calculateProteinNeeds, setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
   
-  // Reset to first step when component mounts
+  // Set to gender selection step (index 1) when component mounts, skipping welcome step
   useEffect(() => {
-    setCurrentStep(0);
+    setCurrentStep(1);
   }, [setCurrentStep]);
   
   // If onboarding is already completed, redirect to analyze
@@ -34,6 +33,7 @@ const OnboardingWizard = () => {
     return <Navigate to="/analyze" />;
   }
   
+  // Keep the welcome step in the array but start from gender step
   const steps = [
     { id: 'welcome', component: WelcomeStep },
     { id: 'gender', component: GenderSelectionStep },
@@ -91,14 +91,14 @@ const OnboardingWizard = () => {
         <div className="mb-4">
           <div className="flex justify-between items-center mb-6">
             <div className="text-sm text-muted-foreground">
-              Step {currentStep + 1} of {steps.length}
+              Step {currentStep} of {steps.length - 1}
             </div>
             
             <div className="flex space-x-1">
-              {steps.map((_, index) => (
+              {steps.slice(1).map((_, index) => (
                 <div 
                   key={index}
-                  className={`h-1.5 w-8 rounded-full ${index <= currentStep ? 'bg-primary' : 'bg-muted'}`}
+                  className={`h-1.5 w-8 rounded-full ${index < currentStep - 1 ? 'bg-primary' : 'bg-muted'}`}
                 />
               ))}
             </div>
@@ -107,12 +107,12 @@ const OnboardingWizard = () => {
           <CurrentStepComponent 
             userDetails={userDetails}
             updateUserDetails={updateUserDetails}
-            onBack={currentStep > 0 ? handleBack : undefined}
+            onBack={currentStep > 1 ? handleBack : undefined}
           />
         </div>
         
         <div className="flex justify-between mt-8">
-          {currentStep > 0 && currentStep !== 1 && (
+          {currentStep > 1 && (
             <Button 
               variant="outline" 
               onClick={handleBack}
@@ -121,7 +121,7 @@ const OnboardingWizard = () => {
             </Button>
           )}
           
-          <div className={`${currentStep > 0 && currentStep !== 1 ? 'ml-auto' : 'w-full'}`}>
+          <div className={`${currentStep > 1 ? 'ml-auto' : 'w-full'}`}>
             {currentStep < steps.length - 1 ? (
               <Button 
                 onClick={handleNext} 
