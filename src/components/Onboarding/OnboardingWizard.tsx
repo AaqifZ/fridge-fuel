@@ -23,17 +23,14 @@ const OnboardingWizard = () => {
   const { calculateProteinNeeds, setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
   
-  // Set to gender selection step (index 1) when component mounts, skipping welcome step
   useEffect(() => {
     setCurrentStep(1);
   }, [setCurrentStep]);
   
-  // If onboarding is already completed, redirect to analyze
   if (isCompleted) {
     return <Navigate to="/analyze" />;
   }
   
-  // Keep the welcome step in the array but start from gender step
   const steps = [
     { id: 'welcome', component: WelcomeStep },
     { id: 'gender', component: GenderSelectionStep },
@@ -45,7 +42,6 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
-    // For the gender step, we need to validate selection before proceeding
     if (currentStep === 1 && !userDetails.gender) {
       toast.error("Please select your gender to continue");
       return;
@@ -65,7 +61,6 @@ const OnboardingWizard = () => {
   const handleComplete = () => {
     const { weight, height, age, gender, activityLevel, goal } = userDetails;
     
-    // Calculate protein target based on user data
     if (weight && height && age && gender && activityLevel && goal) {
       const proteinTarget = calculateProteinNeeds(
         weight, 
@@ -85,24 +80,36 @@ const OnboardingWizard = () => {
     }
   };
   
+  const isGenderStep = currentStep === 1;
+  
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-secondary/10">
-      <div className="glass-card w-full max-w-lg p-6 rounded-2xl shadow-xl border border-primary/10 animate-fade-in">
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-6">
-            <div className="text-sm text-muted-foreground">
-              Step {currentStep} of {steps.length - 1}
+    <div className="min-h-screen flex flex-col items-center justify-between p-4 bg-gradient-to-b from-background to-secondary/10">
+      <div className="glass-card w-full max-w-lg p-6 pb-4 rounded-2xl shadow-xl border border-primary/10 animate-fade-in flex flex-col" style={{ minHeight: '85vh' }}>
+        <div className="mb-4 flex-1">
+          {!isGenderStep && (
+            <div className="flex justify-between items-center mb-6">
+              <div className="text-sm text-muted-foreground">
+                Step {currentStep} of {steps.length - 1}
+              </div>
+              
+              <div className="flex space-x-1">
+                {steps.slice(1).map((_, index) => (
+                  <div 
+                    key={index}
+                    className={`h-1.5 w-8 rounded-full ${index < currentStep - 1 ? 'bg-primary' : 'bg-muted'}`}
+                  />
+                ))}
+              </div>
             </div>
-            
-            <div className="flex space-x-1">
-              {steps.slice(1).map((_, index) => (
-                <div 
-                  key={index}
-                  className={`h-1.5 w-8 rounded-full ${index < currentStep - 1 ? 'bg-primary' : 'bg-muted'}`}
-                />
-              ))}
+          )}
+          
+          {isGenderStep && (
+            <div className="flex justify-between items-center mb-6">
+              <div className="h-1.5 w-full bg-gray-200 rounded-full">
+                <div className="h-full bg-gray-400 rounded-full" style={{ width: '20%' }}></div>
+              </div>
             </div>
-          </div>
+          )}
           
           <CurrentStepComponent 
             userDetails={userDetails}
@@ -111,30 +118,38 @@ const OnboardingWizard = () => {
           />
         </div>
         
-        <div className="flex justify-between mt-8">
-          {currentStep > 1 && (
+        <div className="mt-auto pt-4">
+          {isGenderStep ? (
             <Button 
-              variant="outline" 
-              onClick={handleBack}
+              onClick={handleNext}
+              className="w-full h-14 rounded-full text-lg font-medium bg-gray-400 hover:bg-gray-500"
             >
-              Back
+              Continue
             </Button>
+          ) : (
+            <div className="flex justify-between">
+              {currentStep > 1 && (
+                <Button 
+                  variant="outline" 
+                  onClick={handleBack}
+                >
+                  Back
+                </Button>
+              )}
+              
+              <div className={`${currentStep > 1 ? 'ml-auto' : 'w-full'}`}>
+                {currentStep < steps.length - 1 ? (
+                  <Button onClick={handleNext}>
+                    Continue
+                  </Button>
+                ) : (
+                  <Button onClick={handleComplete}>
+                    Start Analyzing Your Fridge
+                  </Button>
+                )}
+              </div>
+            </div>
           )}
-          
-          <div className={`${currentStep > 1 ? 'ml-auto' : 'w-full'}`}>
-            {currentStep < steps.length - 1 ? (
-              <Button 
-                onClick={handleNext} 
-                className={currentStep === 1 ? "w-full py-3 text-lg rounded-full" : ""}
-              >
-                {currentStep === 1 ? "Continue" : "Continue"}
-              </Button>
-            ) : (
-              <Button onClick={handleComplete}>
-                Start Analyzing Your Fridge
-              </Button>
-            )}
-          </div>
         </div>
       </div>
     </div>
