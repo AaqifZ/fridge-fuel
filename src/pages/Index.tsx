@@ -24,7 +24,7 @@ const Index: React.FC = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-4 pb-10">
         {/* App logo/brand */}
         <div className="mb-6">
-          <div className="font-bold text-2xl text-primary">FridgeFuel</div>
+          <div className="font-bold text-2xl text-primary">BulkAI</div>
         </div>
         
         {/* Hero image - smaller, more relevant */}
