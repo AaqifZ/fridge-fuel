@@ -32,19 +32,19 @@ const GenderSelectionStep: React.FC<GenderSelectionStepProps> = ({
       <RadioGroup
         value={userDetails.gender}
         onValueChange={(value) => updateUserDetails({ gender: value as 'male' | 'female' | 'other' })}
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-4"
       >
-        <div className="flex items-center space-x-2 rounded-xl p-4 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+        <div className={`flex items-center space-x-2 rounded-xl p-5 transition-all cursor-pointer ${userDetails.gender === 'male' ? 'bg-primary/20 border-2 border-primary' : 'bg-secondary/10 hover:bg-secondary/20 border-2 border-transparent'}`}>
           <RadioGroupItem value="male" id="male" className="mr-2" />
           <Label htmlFor="male" className="flex-1 cursor-pointer text-xl font-medium">Male</Label>
         </div>
         
-        <div className="flex items-center space-x-2 rounded-xl p-4 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+        <div className={`flex items-center space-x-2 rounded-xl p-5 transition-all cursor-pointer ${userDetails.gender === 'female' ? 'bg-primary/20 border-2 border-primary' : 'bg-secondary/10 hover:bg-secondary/20 border-2 border-transparent'}`}>
           <RadioGroupItem value="female" id="female" className="mr-2" />
           <Label htmlFor="female" className="flex-1 cursor-pointer text-xl font-medium">Female</Label>
         </div>
         
-        <div className="flex items-center space-x-2 rounded-xl p-4 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+        <div className={`flex items-center space-x-2 rounded-xl p-5 transition-all cursor-pointer ${userDetails.gender === 'other' ? 'bg-primary/20 border-2 border-primary' : 'bg-secondary/10 hover:bg-secondary/20 border-2 border-transparent'}`}>
           <RadioGroupItem value="other" id="other" className="mr-2" />
           <Label htmlFor="other" className="flex-1 cursor-pointer text-xl font-medium">Other</Label>
         </div>
