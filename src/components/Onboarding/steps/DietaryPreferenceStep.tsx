@@ -1,9 +1,8 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Beef, Fish, Leaf, Carrot, Ban, CheckCircle2 } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Beef, Fish, Leaf, Carrot, Ban } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
 interface DietaryPreferenceStepProps {
@@ -19,6 +18,16 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
   userDetails, 
   updateUserDetails 
 }) => {
+  // Ensure there's a default value for the radio group
+  // This is crucial to prevent undefined values
+  const handleDietaryChange = (value: 'classic' | 'pescatarian' | 'vegetarian' | 'vegan') => {
+    console.log("Setting dietary preference to:", value);
+    updateUserDetails({ dietaryPreference: value });
+  };
+
+  // Debug the current value
+  console.log("Current dietary preference:", userDetails.dietaryPreference);
+  
   return (
     <div className="space-y-6">
       <div className="text-center mb-4">
@@ -28,11 +37,10 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
       <RadioGroup
         className="space-y-3"
         value={userDetails.dietaryPreference || 'classic'}
-        onValueChange={(value: 'classic' | 'pescatarian' | 'vegetarian' | 'vegan') => 
-          updateUserDetails({ dietaryPreference: value })
-        }
+        onValueChange={handleDietaryChange}
       >
-        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => updateUserDetails({ dietaryPreference: 'classic' })}>
+        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" 
+             onClick={() => handleDietaryChange('classic')}>
           <RadioGroupItem value="classic" id="classic" className="mr-2" />
           <div className="flex-shrink-0 rounded-full bg-orange-100 p-1.5 mr-3">
             <Beef className="h-5 w-5 text-orange-500" />
@@ -43,7 +51,8 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => updateUserDetails({ dietaryPreference: 'pescatarian' })}>
+        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" 
+             onClick={() => handleDietaryChange('pescatarian')}>
           <RadioGroupItem value="pescatarian" id="pescatarian" className="mr-2" />
           <div className="flex-shrink-0 rounded-full bg-blue-100 p-1.5 mr-3">
             <Fish className="h-5 w-5 text-blue-500" />
@@ -54,7 +63,8 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => updateUserDetails({ dietaryPreference: 'vegetarian' })}>
+        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" 
+             onClick={() => handleDietaryChange('vegetarian')}>
           <RadioGroupItem value="vegetarian" id="vegetarian" className="mr-2" />
           <div className="flex-shrink-0 rounded-full bg-green-100 p-1.5 mr-3">
             <Leaf className="h-5 w-5 text-green-500" />
@@ -65,7 +75,8 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => updateUserDetails({ dietaryPreference: 'vegan' })}>
+        <div className="flex items-center space-x-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors cursor-pointer" 
+             onClick={() => handleDietaryChange('vegan')}>
           <RadioGroupItem value="vegan" id="vegan" className="mr-2" />
           <div className="flex-shrink-0 rounded-full bg-green-100 p-1.5 mr-3">
             <Carrot className="h-5 w-5 text-green-600" />

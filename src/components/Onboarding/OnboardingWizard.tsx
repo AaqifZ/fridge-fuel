@@ -31,7 +31,9 @@ const OnboardingWizard = () => {
   
   useEffect(() => {
     setCurrentStep(1);
-  }, [setCurrentStep]);
+    // For debugging - log the current userDetails
+    console.log("Initial userDetails:", userDetails);
+  }, [setCurrentStep, userDetails]);
   
   if (isCompleted) {
     return <Navigate to="/analyze" />;
@@ -49,6 +51,10 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
+    // Debug the current state when trying to navigate
+    console.log("Current userDetails:", userDetails);
+    console.log("Current step:", currentStep);
+    
     if (currentStep === 1 && (!userDetails.currentWeight || !userDetails.targetWeight)) {
       toast.error("Please enter your current and target weights to continue");
       return;
@@ -59,9 +65,12 @@ const OnboardingWizard = () => {
       return;
     }
     
-    // Modified validation for dietary preference step
-    // Only check if dietaryPreference exists, gluten/dairy settings can be undefined
-    if (currentStep === 3 && userDetails.dietaryPreference === undefined) {
+    // Fix dietary preference validation
+    // Explicitly check if dietaryPreference is null, undefined, or empty string
+    if (currentStep === 3 && 
+        (userDetails.dietaryPreference === undefined || 
+         userDetails.dietaryPreference === null || 
+         userDetails.dietaryPreference === '')) {
       toast.error("Please select your dietary preference to continue");
       return;
     }

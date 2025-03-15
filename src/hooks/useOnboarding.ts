@@ -32,7 +32,9 @@ interface OnboardingState {
 const initialState = {
   isCompleted: false,
   currentStep: 0,
-  userDetails: {},
+  userDetails: {
+    dietaryPreference: 'classic', // Set default value to prevent undefined state
+  },
 };
 
 export const useOnboarding = create<OnboardingState>()(
@@ -43,15 +45,19 @@ export const useOnboarding = create<OnboardingState>()(
       setIsCompleted: (value) => set({ isCompleted: value }),
       setCurrentStep: (step) => set({ currentStep: step }),
       updateUserDetails: (details) => 
-        set((state) => ({ 
-          userDetails: { ...state.userDetails, ...details } 
-        })),
+        set((state) => {
+          console.log("Updating user details:", details);
+          console.log("Previous state:", state.userDetails);
+          return { 
+            userDetails: { ...state.userDetails, ...details } 
+          };
+        }),
       resetOnboarding: () => set(initialState),
     }),
     {
       name: 'onboarding-storage',
       // Update version number to force refresh of existing storage
-      version: 17,
+      version: 18, // Increment version to clear potentially corrupted state
     }
   )
 );
