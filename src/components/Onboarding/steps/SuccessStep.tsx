@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
-import { Check, Pencil, Camera } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Camera } from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
+import NutritionCards from '../components/NutritionCards';
+import SuccessHeader from '../components/SuccessHeader';
 
 interface SuccessStepProps {
   userDetails: {
@@ -16,114 +18,6 @@ interface SuccessStepProps {
   };
   updateUserDetails: (details: Partial<SuccessStepProps['userDetails']>) => void;
 }
-
-const CircularProgress = ({ 
-  label, 
-  value, 
-  unit, 
-  color = "hsl(var(--primary))", 
-  percentage = 75,
-  onAdjust
-}: { 
-  label: string; 
-  value: number; 
-  unit: string; 
-  color?: string; 
-  percentage?: number;
-  onAdjust?: (newValue: number) => void;
-}) => {
-  const size = 80;
-  const strokeWidth = 3;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
-  
-  const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(value);
-  
-  useEffect(() => {
-    setEditValue(value);
-  }, [value]);
-  
-  const handleEdit = () => {
-    if (!onAdjust) return;
-    
-    if (isEditing) {
-      onAdjust(editValue);
-    }
-    setIsEditing(!isEditing);
-  };
-  
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value);
-    if (!isNaN(newValue) && newValue >= 0) {
-      setEditValue(newValue);
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center">
-      <p className="text-sm font-medium mb-1">
-        {label}
-      </p>
-      <div className="relative flex items-center justify-center">
-        <svg width={size} height={size} className="transform -rotate-90">
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke="hsl(var(--muted))"
-            strokeWidth={strokeWidth}
-          />
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={color}
-            strokeWidth={strokeWidth}
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-          />
-        </svg>
-        <div className="absolute text-center">
-          {isEditing && onAdjust ? (
-            <input
-              type="number"
-              value={editValue}
-              onChange={handleValueChange}
-              className="w-12 text-center bg-transparent border-b border-primary text-sm font-semibold"
-              autoFocus
-              onBlur={() => {
-                onAdjust(editValue);
-                setIsEditing(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onAdjust(editValue);
-                  setIsEditing(false);
-                }
-              }}
-            />
-          ) : (
-            <span className="text-sm font-semibold">{value}{unit}</span>
-          )}
-        </div>
-        {onAdjust && (
-          <div className="absolute bottom-0 right-0">
-            <Pencil 
-              size={14} 
-              className="text-muted-foreground hover:text-primary cursor-pointer" 
-              onClick={handleEdit}
-            />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
 
 const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const weightUnit = userDetails.weightUnit || 'kg';
@@ -176,93 +70,25 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
     setCarbs(Math.round(remainingCalories / 4));
   };
   
-  const getSocialProofMessage = () => {
-    if (isGain) {
-      return `Join 847 others who gained ${weightDifference}${weightUnit}+ in ${userDetails.goalTimelineMonths || 3} months`;
-    } else {
-      return `92% of users hit their target following this plan`;
-    }
-  };
-  
   return (
     <div className="text-center space-y-4">
-      <div className="flex justify-center">
-        <div className="rounded-full bg-primary/20 p-2 w-12 h-12 flex items-center justify-center">
-          <Check className="w-6 h-6 text-primary" />
-        </div>
-      </div>
-      
-      <div>
-        <h2 className="text-xl font-bold">Congratulations</h2>
-        <p className="text-base font-medium">your custom plan is ready!</p>
-      </div>
-      
-      <div className="py-1">
-        <p className="text-sm font-medium mb-1">You should {isGain ? 'gain' : 'lose'}:</p>
-        <div className="inline-block px-4 py-1.5 bg-primary/10 rounded-full">
-          <p className="text-base font-bold">
-            {weightDifference} {weightUnit} by {targetDate}
-          </p>
-        </div>
-      </div>
-      
-      <div className="text-sm italic text-muted-foreground">
-        {getSocialProofMessage()}
-      </div>
+      <SuccessHeader 
+        isGain={isGain}
+        weightDifference={weightDifference}
+        weightUnit={weightUnit}
+        targetDate={targetDate}
+      />
       
       <div className="bg-secondary/20 rounded-lg p-3">
-        <div className="grid grid-cols-2 gap-2">
-          <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-2">
-              <CircularProgress 
-                label="Calories" 
-                value={calories} 
-                unit="" 
-                color="hsl(var(--primary))" 
-                percentage={70}
-              />
-            </CardContent>
-          </Card>
-          
-          <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-2">
-              <CircularProgress 
-                label="Carbs" 
-                value={carbs} 
-                unit="g" 
-                color="hsl(var(--secondary))" 
-                percentage={60}
-                onAdjust={handleCarbsAdjust}
-              />
-            </CardContent>
-          </Card>
-          
-          <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-2">
-              <CircularProgress 
-                label="Protein" 
-                value={proteinTarget} 
-                unit="g" 
-                color="hsl(var(--accent))" 
-                percentage={75}
-                onAdjust={handleProteinAdjust}
-              />
-            </CardContent>
-          </Card>
-          
-          <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-2">
-              <CircularProgress 
-                label="Fats" 
-                value={fats} 
-                unit="g" 
-                color="hsl(var(--muted-foreground))" 
-                percentage={50}
-                onAdjust={handleFatsAdjust}
-              />
-            </CardContent>
-          </Card>
-        </div>
+        <NutritionCards 
+          calories={calories}
+          carbs={carbs}
+          protein={proteinTarget}
+          fats={fats}
+          onProteinAdjust={handleProteinAdjust}
+          onCarbsAdjust={handleCarbsAdjust}
+          onFatsAdjust={handleFatsAdjust}
+        />
       </div>
       
       <div className="mt-3 text-sm text-primary font-medium">
