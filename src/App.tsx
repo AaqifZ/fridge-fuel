@@ -56,21 +56,21 @@ const AppContent = () => {
   const { isCompleted } = useOnboarding();
   const location = useLocation();
   
-  // Hide navbar on index page
-  const showNavbar = isCompleted && location.pathname !== '/';
+  // Hide navbar on index page and onboarding
+  const showNavbar = location.pathname !== '/' && location.pathname !== '/onboarding';
   
   return (
     <>
       {showNavbar && <Navbar />}
       <div className="relative z-0">
         <Routes>
+          <Route path="/" element={<Index />} />
           <Route 
-            path="/" 
-            element={isCompleted ? <Index /> : <Navigate to="/onboarding" />} 
+            path="/analyze" 
+            element={isCompleted ? <Analyze /> : <Navigate to="/onboarding" />} 
           />
           <Route path="/onboarding" element={<OnboardingWizard />} />
           <Route path="/calculator" element={<Calculator />} />
-          <Route path="/analyze" element={<Analyze />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
