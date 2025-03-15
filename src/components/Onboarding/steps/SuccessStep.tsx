@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Check, Pencil, Camera } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -214,17 +213,6 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
     }
   };
   
-  // Get protein meal plan with personality - removed intermediate plan
-  const getProteinMealPlan = () => {
-    if (proteinTarget > 160) {
-      return "Crush your goals with 3 shakes, 2 chicken breasts, Greek yogurt, and a protein bar!";
-    } else if (proteinTarget >= 100) {
-      return "Fuel up with a shake, a chicken breast, and some cottage cheese!";
-    } else {
-      return "Kickstart with a protein shake and a chicken breast to build your foundation!";
-    }
-  };
-  
   return (
     <div className="text-center space-y-4">
       <div className="flex justify-center">
@@ -304,18 +292,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
             </CardContent>
           </Card>
         </div>
-        
-        <p className="text-xs text-muted-foreground mt-3 italic">
-          {getProteinMealPlan()}
-        </p>
       </div>
-      
-      <Button 
-        className="w-full py-3 text-lg rounded-full bg-primary text-primary-foreground hover:bg-primary/90 mt-3 flex items-center justify-center gap-2"
-      >
-        <Camera className="w-5 h-5" />
-        Take Photo Now
-      </Button>
     </div>
   );
 };
