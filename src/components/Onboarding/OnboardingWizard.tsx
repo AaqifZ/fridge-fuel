@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -31,9 +30,8 @@ const OnboardingWizard = () => {
   
   useEffect(() => {
     setCurrentStep(1);
-    // For debugging - log the current userDetails
     console.log("Initial userDetails:", userDetails);
-  }, [setCurrentStep, userDetails]);
+  }, [setCurrentStep]);
   
   if (isCompleted) {
     return <Navigate to="/analyze" />;
@@ -51,7 +49,6 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
-    // Debug the current state when trying to navigate
     console.log("Current userDetails:", userDetails);
     console.log("Current step:", currentStep);
     
@@ -65,8 +62,6 @@ const OnboardingWizard = () => {
       return;
     }
     
-    // Fix dietary preference validation by checking for undefined instead of empty string
-    // Also consider 'classic' as a valid value that's preselected
     if (currentStep === 3 && userDetails.dietaryPreference === undefined) {
       toast.error("Please select your dietary preference to continue");
       return;
@@ -97,7 +92,6 @@ const OnboardingWizard = () => {
   const totalStepsShown = steps.length - 1;
   const currentVisibleStep = currentStep === 0 ? 1 : currentStep;
   
-  // Set FIXED height for content instead of minimum height to ensure consistency
   const contentHeight = isMobile ? 'h-[580px]' : 'h-[620px]';
   
   return (
@@ -119,7 +113,6 @@ const OnboardingWizard = () => {
             </div>
           </div>
           
-          {/* Content container with fixed height and ScrollArea for overflow */}
           <div className={`${contentHeight} relative overflow-hidden`}>
             <ScrollArea className="h-full pr-4">
               <div className="pb-4">
