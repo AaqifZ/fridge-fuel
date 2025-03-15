@@ -21,7 +21,7 @@ const CircularProgress = ({
   label, 
   value, 
   unit, 
-  color = "#000", 
+  color = "hsl(var(--primary))", 
   percentage = 75 
 }: { 
   label: string; 
@@ -48,7 +48,7 @@ const CircularProgress = ({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#E5E7EB"
+            stroke="hsl(var(--muted))"
             strokeWidth={strokeWidth}
           />
           {/* Progress circle */}
@@ -70,7 +70,7 @@ const CircularProgress = ({
         </div>
         {/* Edit icon */}
         <div className="absolute bottom-0 right-0">
-          <Pencil size={18} className="text-gray-500" />
+          <Pencil size={18} className="text-muted-foreground hover:text-primary cursor-pointer" />
         </div>
       </div>
     </div>
@@ -103,8 +103,8 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   return (
     <div className="text-center space-y-8 py-2">
       <div className="flex justify-center">
-        <div className="rounded-full bg-black p-4 w-16 h-16 flex items-center justify-center">
-          <Check className="w-8 h-8 text-white" />
+        <div className="rounded-full bg-primary/20 p-4 w-16 h-16 flex items-center justify-center">
+          <Check className="w-8 h-8 text-primary" />
         </div>
       </div>
       
@@ -115,14 +115,14 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
       
       <div className="py-4">
         <p className="text-2xl font-medium mb-3">You should {isGain ? 'gain' : 'lose'}:</p>
-        <div className="inline-block px-6 py-3 bg-gray-100 rounded-full">
+        <div className="inline-block px-6 py-3 bg-primary/10 rounded-full">
           <p className="text-2xl font-bold">
             {weightDifference} {weightUnit} by {targetDate}
           </p>
         </div>
       </div>
       
-      <div className="bg-gray-50 rounded-2xl p-4">
+      <div className="bg-secondary/20 rounded-2xl p-4">
         <div className="grid grid-cols-2 gap-4">
           <Card className="border-0 shadow-none bg-white">
             <CardContent className="p-4">
@@ -130,7 +130,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
                 label="Calories" 
                 value={calories} 
                 unit="" 
-                color="#000000" 
+                color="hsl(var(--primary))" 
                 percentage={70}
               />
             </CardContent>
@@ -142,7 +142,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
                 label="Carbs" 
                 value={carbs} 
                 unit="g" 
-                color="#F97316" 
+                color="hsl(var(--secondary))" 
                 percentage={60}
               />
             </CardContent>
@@ -154,7 +154,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
                 label="Protein" 
                 value={proteinTarget} 
                 unit="g" 
-                color="#EF4444" 
+                color="hsl(var(--accent))" 
                 percentage={75}
               />
             </CardContent>
@@ -166,7 +166,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
                 label="Fats" 
                 value={fats} 
                 unit="g" 
-                color="#3B82F6" 
+                color="hsl(var(--muted-foreground))" 
                 percentage={50}
               />
             </CardContent>
@@ -175,7 +175,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
         
         <div className="flex items-center justify-between bg-white p-4 mt-4 rounded-lg">
           <div className="flex items-center gap-2">
-            <Heart className="h-6 w-6 text-rose-500 fill-rose-500" />
+            <Heart className="h-6 w-6 text-primary fill-primary" />
             <span className="text-xl font-medium">Health Score</span>
           </div>
           <span className="text-xl font-bold">{healthScore}/10</span>

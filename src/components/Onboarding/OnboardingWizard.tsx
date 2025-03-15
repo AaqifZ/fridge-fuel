@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -120,7 +121,7 @@ const OnboardingWizard = () => {
             ) : (
               <Button 
                 onClick={handleComplete}
-                className="w-full py-3 text-lg rounded-full bg-black text-white hover:bg-black/90"
+                className="w-full py-3 text-lg rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Let's get started!
               </Button>
