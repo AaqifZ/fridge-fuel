@@ -21,11 +21,11 @@ const Index: React.FC = () => {
       
       {/* Main content - vertically centered */}
       <div className="flex-1 flex flex-col items-center justify-end pb-32">
-        {/* Cooking image */}
+        {/* Protein-focused image */}
         <div className="w-64 h-64 mb-8">
           <img 
-            src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9" 
-            alt="Fresh ingredients for cooking" 
+            src="https://images.unsplash.com/photo-1490645935967-10de6ba17061" 
+            alt="Protein-rich food preparation" 
             className="w-full h-full object-cover rounded-full"
           />
         </div>
