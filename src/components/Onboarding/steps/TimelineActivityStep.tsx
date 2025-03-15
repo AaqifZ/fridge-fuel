@@ -33,20 +33,20 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
   };
 
   return (
-    <div className="space-y-4">
-      <div className="text-center mb-4">
+    <div className="space-y-6">
+      <div className="text-center mb-6">
         <h2 className="text-2xl font-bold">Customize Your Journey</h2>
       </div>
 
       {/* Timeline Section */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-4">
           <Clock className="h-5 w-5 text-primary" />
-          <Label className="text-base font-medium">Goal timeline</Label>
+          <Label className="text-base font-medium">How quickly do you want to reach your goal weight?</Label>
         </div>
         
-        <div className="bg-blue-50/30 p-3 rounded-xl">
-          <div className="flex justify-between items-center mb-2">
+        <div className="bg-blue-50/30 p-4 rounded-xl">
+          <div className="flex justify-between items-center mb-4">
             <span className="text-sm text-muted-foreground">Timeline</span>
             <span className="text-lg font-semibold text-primary">
               {userDetails.goalTimelineMonths} months
@@ -59,7 +59,7 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
             max={12}
             step={1}
             onValueChange={handleTimelineChange}
-            className="py-2"
+            className="py-4"
           />
 
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
@@ -70,19 +70,19 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
       </div>
 
       {/* Activity Level Section */}
-      <div className="space-y-2 mt-4">
+      <div className="space-y-3 mt-6">
         <div className="flex items-center gap-2 mb-2">
           <Activity className="h-5 w-5 text-primary" />
-          <Label className="text-base font-medium">Physical activity level</Label>
+          <Label className="text-base font-medium">How would you describe your physical activity?</Label>
         </div>
 
         <RadioGroup
           value={userDetails.activityLevel}
           onValueChange={(value) => handleActivityChange(value as 'sedentary' | 'moderate' | 'active')}
-          className="space-y-2"
+          className="space-y-3"
         >
           <div 
-            className={`flex items-center space-x-3 rounded-xl border p-3 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'sedentary' ? 'bg-blue-50/30 border-primary/30' : ''}`}
+            className={`flex items-center space-x-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'sedentary' ? 'bg-blue-50/30 border-primary/30' : ''}`}
             onClick={() => handleActivityChange('sedentary')}
           >
             <RadioGroupItem value="sedentary" id="sedentary" />
@@ -93,7 +93,7 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
           </div>
 
           <div 
-            className={`flex items-center space-x-3 rounded-xl border p-3 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'moderate' ? 'bg-blue-50/30 border-primary/30' : ''}`}
+            className={`flex items-center space-x-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'moderate' ? 'bg-blue-50/30 border-primary/30' : ''}`}
             onClick={() => handleActivityChange('moderate')}
           >
             <RadioGroupItem value="moderate" id="moderate" />
@@ -104,7 +104,7 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
           </div>
 
           <div 
-            className={`flex items-center space-x-3 rounded-xl border p-3 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'active' ? 'bg-blue-50/30 border-primary/30' : ''}`}
+            className={`flex items-center space-x-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'active' ? 'bg-blue-50/30 border-primary/30' : ''}`}
             onClick={() => handleActivityChange('active')}
           >
             <RadioGroupItem value="active" id="active" />
