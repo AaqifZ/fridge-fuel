@@ -101,6 +101,17 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const carbs = Math.round(calories * 0.4 / 4);
   const fats = Math.round(calories * 0.3 / 9);
   
+  // Get protein meal plan with personality
+  const getProteinMealPlan = () => {
+    if (proteinTarget > 160) {
+      return "Crush your goals with 3 shakes, 2 chicken breasts, Greek yogurt, and a protein bar!";
+    } else if (proteinTarget >= 120) {
+      return "Power through with 2 shakes, a chicken breast, yogurt, and a protein bar!";
+    } else {
+      return "Fuel up with a shake, a chicken breast, and some cottage cheese!";
+    }
+  };
+  
   return (
     <div className="text-center space-y-4">
       <div className="flex justify-center">
@@ -175,7 +186,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
         </div>
         
         <p className="text-xs text-muted-foreground mt-3 italic">
-          Calculated based on your goals and activity level
+          {getProteinMealPlan()}
         </p>
       </div>
     </div>
