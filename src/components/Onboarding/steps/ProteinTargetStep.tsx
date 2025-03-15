@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
-import { Beef, Calendar } from 'lucide-react';
+import { Beef, Calendar, FlaskConical } from 'lucide-react';
 import { toast } from 'sonner';
 import { format, addMonths, addDays } from 'date-fns';
 
@@ -24,6 +25,78 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
   const [goalDate, setGoalDate] = useState<Date | null>(null);
   const [baseGoalDate, setBaseGoalDate] = useState<Date | null>(null);
   const useKg = userDetails.weightUnit === 'kg';
+  
+  // Get scientific explanation for protein target
+  const getScientificExplanation = (proteinTarget: number, currentWeight?: number, activityLevel?: string) => {
+    if (!currentWeight) return "";
+    
+    const weightInKg = useKg ? currentWeight : Math.round(currentWeight * 0.453592);
+    const gramsPerKg = (proteinTarget / weightInKg).toFixed(1);
+    
+    if (activityLevel === 'active') {
+      return `${proteinTarget}g (${gramsPerKg}g/kg) optimizes muscle protein synthesis for your active lifestyle while staying within healthy kidney parameters.`;
+    } else if (activityLevel === 'moderate') {
+      return `${proteinTarget}g (${gramsPerKg}g/kg) supports your activity level for optimal recovery while maintaining metabolic health.`;
+    } else {
+      return `${proteinTarget}g (${gramsPerKg}g/kg) provides the amino acids needed for your body weight while preventing muscle loss.`;
+    }
+  };
+  
+  // Get actionable protein sources breakdown
+  const getProteinSourcesBreakdown = (proteinGrams: number) => {
+    // Common protein sources with approximate protein content
+    const proteinShake = 25; // 25g per shake
+    const chickenBreast = 30; // 30g per medium breast
+    const greekYogurt = 15;  // 15g per cup
+    const eggWhites = 4;     // 4g per egg white
+    const cottageCheese = 12; // 12g per 1/2 cup
+    const proteinBar = 20;   // 20g per bar
+    
+    let plan = [];
+    let remainingProtein = proteinGrams;
+    
+    // For high protein targets (>160g)
+    if (proteinGrams > 160) {
+      plan.push(`3 protein shakes (${3 * proteinShake}g)`);
+      remainingProtein -= 3 * proteinShake;
+      plan.push(`2 chicken breasts (${2 * chickenBreast}g)`);
+      remainingProtein -= 2 * chickenBreast;
+      plan.push(`1 cup of Greek yogurt (${greekYogurt}g)`);
+      remainingProtein -= greekYogurt;
+      plan.push(`1 protein bar (${proteinBar}g)`);
+      remainingProtein -= proteinBar;
+    } 
+    // For medium protein targets (120-160g)
+    else if (proteinGrams >= 120) {
+      plan.push(`2 protein shakes (${2 * proteinShake}g)`);
+      remainingProtein -= 2 * proteinShake;
+      plan.push(`1 chicken breast (${chickenBreast}g)`);
+      remainingProtein -= chickenBreast;
+      plan.push(`1 cup of Greek yogurt (${greekYogurt}g)`);
+      remainingProtein -= greekYogurt;
+      plan.push(`1 protein bar (${proteinBar}g)`);
+      remainingProtein -= proteinBar;
+    } 
+    // For lower protein targets (<120g)
+    else {
+      plan.push(`1 protein shake (${proteinShake}g)`);
+      remainingProtein -= proteinShake;
+      plan.push(`1 chicken breast (${chickenBreast}g)`);
+      remainingProtein -= chickenBreast;
+      plan.push(`1 cup of cottage cheese (${cottageCheese * 2}g)`);
+      remainingProtein -= cottageCheese * 2;
+    }
+    
+    // Add egg whites if there's still protein needed
+    if (remainingProtein > 20) {
+      const eggWhiteCount = Math.floor(remainingProtein / eggWhites);
+      if (eggWhiteCount > 0) {
+        plan.push(`${eggWhiteCount} egg whites (${eggWhiteCount * eggWhites}g)`);
+      }
+    }
+    
+    return `Daily protein plan: ${plan.join(', ')}`;
+  };
   
   useEffect(() => {
     if (userDetails.currentWeight && userDetails.targetWeight && 
@@ -170,6 +243,16 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
             <span className="text-sm font-normal ml-1">g</span>
           </div>
         </div>
+
+        {/* Scientific explanation */}
+        <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
+          <FlaskConical className="h-5 w-5 text-purple-500" />
+          <span>
+            {userDetails.proteinTarget && userDetails.currentWeight ? 
+              getScientificExplanation(userDetails.proteinTarget, userDetails.currentWeight, userDetails.activityLevel) : 
+              ''}
+          </span>
+        </div>
         
         {goalDate && (
           <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
@@ -180,9 +263,12 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
           </div>
         )}
         
+        {/* Actionable protein sources breakdown */}
         <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
           <Beef className="h-5 w-5 text-red-500" />
-          <span>{userDetails.proteinTarget ? getProteinVisualization(userDetails.proteinTarget) : ''}</span>
+          <span className="flex-1">
+            {userDetails.proteinTarget ? getProteinSourcesBreakdown(userDetails.proteinTarget) : ''}
+          </span>
         </div>
         
         <div className="pt-4">
