@@ -19,12 +19,16 @@ interface OnboardingState {
   resetOnboarding: () => void;
 }
 
+const initialState = {
+  isCompleted: false,
+  currentStep: 0,
+  userDetails: {},
+};
+
 export const useOnboarding = create<OnboardingState>()(
   persist(
     (set) => ({
-      isCompleted: false,
-      currentStep: 0,
-      userDetails: {},
+      ...initialState,
       
       setIsCompleted: (value) => set({ isCompleted: value }),
       setCurrentStep: (step) => set({ currentStep: step }),
@@ -32,12 +36,7 @@ export const useOnboarding = create<OnboardingState>()(
         set((state) => ({ 
           userDetails: { ...state.userDetails, ...details } 
         })),
-      resetOnboarding: () => 
-        set({ 
-          isCompleted: false, 
-          currentStep: 0, 
-          userDetails: {} 
-        }),
+      resetOnboarding: () => set(initialState),
     }),
     {
       name: 'onboarding-storage',
