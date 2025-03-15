@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Camera } from 'lucide-react';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import Button from '@/components/Button';
 
@@ -24,30 +24,38 @@ const Index: React.FC = () => {
         </button>
       </div>
       
-      {/* Main content - everything in a single container */}
+      {/* Single content container */}
       <div className="flex-1 flex flex-col items-center justify-center px-5 py-10">
         {/* App logo/brand */}
         <div className="mb-8">
           <div className="font-bold text-4xl text-[#1EAEDB]">BulkAI</div>
         </div>
         
-        {/* Hero image */}
-        <div className="w-full max-w-md mb-12">
+        {/* Hero image with camera icon overlay */}
+        <div className="w-full max-w-md mb-12 relative">
           <img 
             src="/lovable-uploads/547e4c49-0421-4f0b-9cb2-bb0838d06b9a.png" 
             alt="Open refrigerator filled with food items" 
             className="w-full object-cover rounded-xl"
           />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-[#1EAEDB] p-4 rounded-full">
+              <Camera size={24} className="text-white" />
+            </div>
+          </div>
         </div>
         
+        {/* Heading */}
         <h1 className="text-4xl font-bold text-center tracking-tight text-gray-900 mb-6">
           Scan. Cook. Gain.
         </h1>
         
+        {/* Subheading */}
         <p className="text-xl text-center mb-10 max-w-md text-gray-600">
           Snap a photo of your fridge and get tailored high-protein recipes in seconds
         </p>
         
+        {/* CTA Button */}
         <div className="w-full max-w-md space-y-4 px-4">
           <Button 
             className="w-full h-14 text-lg bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-white rounded-full shadow-md"
@@ -58,6 +66,7 @@ const Index: React.FC = () => {
             Snap Your Fridge
           </Button>
           
+          {/* Footer text */}
           <div className="text-center pt-4">
             <p className="text-sm text-gray-500">
               Join athletes and fitness enthusiasts saving time while hitting their protein goals
