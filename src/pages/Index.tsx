@@ -24,7 +24,7 @@ const Index: React.FC = () => {
     } catch (error) {
       // In web environments without camera access, provide fallback
       console.error('Camera error:', error);
-      toast.error('Camera access not available. Please ensure you're using the mobile app or have granted camera permissions.');
+      toast.error('Camera access not available. Please ensure you\'re using the mobile app or have granted camera permissions.');
     }
   };
 
