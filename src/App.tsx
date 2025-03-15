@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useOnboarding } from "./hooks/useOnboarding";
 import Index from "./pages/Index";
@@ -54,10 +54,14 @@ const App = () => {
 // Separate component to access routing inside useEffect
 const AppContent = () => {
   const { isCompleted } = useOnboarding();
+  const location = useLocation();
+  
+  // Hide navbar on index page
+  const showNavbar = isCompleted && location.pathname !== '/';
   
   return (
     <>
-      {isCompleted && <Navbar />}
+      {showNavbar && <Navbar />}
       <div className="relative z-0">
         <Routes>
           <Route 
