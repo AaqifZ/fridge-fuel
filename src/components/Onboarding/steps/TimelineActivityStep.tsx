@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Clock, Activity } from 'lucide-react';
 
 interface TimelineActivityStepProps {
   userDetails: {
@@ -32,7 +33,7 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold">Customize Your Journey</h2>
         <p className="text-muted-foreground mt-1">
@@ -40,42 +41,53 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
         </p>
       </div>
 
-      {/* Timeline Slider */}
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <Label htmlFor="timeline" className="text-base">How quickly do you want to reach your goal weight?</Label>
-          <span className="text-base font-medium text-primary">
-            {userDetails.goalTimelineMonths} months
-          </span>
+      {/* Timeline Section */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2 mb-4">
+          <Clock className="h-5 w-5 text-primary" />
+          <Label className="text-base font-medium">How quickly do you want to reach your goal weight?</Label>
         </div>
+        
+        <div className="bg-blue-50/30 p-4 rounded-xl">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm text-muted-foreground">Timeline</span>
+            <span className="text-lg font-semibold text-primary">
+              {userDetails.goalTimelineMonths} months
+            </span>
+          </div>
 
-        <Slider
-          id="timeline"
-          value={[userDetails.goalTimelineMonths || 6]}
-          min={3}
-          max={12}
-          step={1}
-          onValueChange={handleTimelineChange}
-          className="py-4"
-        />
+          <Slider
+            value={[userDetails.goalTimelineMonths || 6]}
+            min={3}
+            max={12}
+            step={1}
+            onValueChange={handleTimelineChange}
+            className="py-4"
+          />
 
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Faster (3 months)</span>
-          <span>Gradual (12 months)</span>
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <span>Faster (3 months)</span>
+            <span>Gradual (12 months)</span>
+          </div>
         </div>
       </div>
 
-      {/* Activity Level Radio Group */}
-      <div className="space-y-4 pt-4">
-        <Label className="text-base">How would you describe your physical activity?</Label>
+      {/* Activity Level Section */}
+      <div className="space-y-3 mt-6">
+        <div className="flex items-center gap-2 mb-2">
+          <Activity className="h-5 w-5 text-primary" />
+          <Label className="text-base font-medium">How would you describe your physical activity?</Label>
+        </div>
 
         <RadioGroup
           value={userDetails.activityLevel}
           onValueChange={(value) => handleActivityChange(value as 'sedentary' | 'moderate' | 'active')}
           className="space-y-3"
         >
-          <div className={`flex items-center space-x-3 rounded-lg p-4 ${userDetails.activityLevel === 'sedentary' ? 'bg-secondary/40' : 'bg-secondary/20'} cursor-pointer`}
-            onClick={() => handleActivityChange('sedentary')}>
+          <div 
+            className={`flex items-center space-x-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'sedentary' ? 'bg-blue-50/30 border-primary/30' : ''}`}
+            onClick={() => handleActivityChange('sedentary')}
+          >
             <RadioGroupItem value="sedentary" id="sedentary" />
             <Label htmlFor="sedentary" className="flex-1 cursor-pointer">
               <div className="font-medium">Mostly sedentary</div>
@@ -83,8 +95,10 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
             </Label>
           </div>
 
-          <div className={`flex items-center space-x-3 rounded-lg p-4 ${userDetails.activityLevel === 'moderate' ? 'bg-secondary/40' : 'bg-secondary/20'} cursor-pointer`}
-            onClick={() => handleActivityChange('moderate')}>
+          <div 
+            className={`flex items-center space-x-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'moderate' ? 'bg-blue-50/30 border-primary/30' : ''}`}
+            onClick={() => handleActivityChange('moderate')}
+          >
             <RadioGroupItem value="moderate" id="moderate" />
             <Label htmlFor="moderate" className="flex-1 cursor-pointer">
               <div className="font-medium">Moderately active</div>
@@ -92,8 +106,10 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
             </Label>
           </div>
 
-          <div className={`flex items-center space-x-3 rounded-lg p-4 ${userDetails.activityLevel === 'active' ? 'bg-secondary/40' : 'bg-secondary/20'} cursor-pointer`}
-            onClick={() => handleActivityChange('active')}>
+          <div 
+            className={`flex items-center space-x-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${userDetails.activityLevel === 'active' ? 'bg-blue-50/30 border-primary/30' : ''}`}
+            onClick={() => handleActivityChange('active')}
+          >
             <RadioGroupItem value="active" id="active" />
             <Label htmlFor="active" className="flex-1 cursor-pointer">
               <div className="font-medium">Very active</div>
