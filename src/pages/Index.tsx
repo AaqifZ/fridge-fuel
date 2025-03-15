@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { ChevronRight, Camera } from 'lucide-react';
 import { useOnboarding } from '@/hooks/useOnboarding';
+import Button from '@/components/Button';
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
@@ -28,28 +28,21 @@ const Index: React.FC = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-5 pb-10">
         {/* App logo/brand */}
         <div className="mb-8">
-          <div className="font-bold text-5xl text-primary">BulkAI</div>
+          <div className="font-bold text-5xl text-[#1EAEDB]">BulkAI</div>
         </div>
         
         {/* Hero image with camera overlay */}
-        <div className="relative w-72 h-72 mb-12">
+        <div className="relative w-full max-w-md mb-12">
           <img 
             src="/lovable-uploads/547e4c49-0421-4f0b-9cb2-bb0838d06b9a.png" 
             alt="Open refrigerator filled with food items" 
-            className="w-full h-full object-cover rounded-xl"
+            className="w-full object-cover rounded-xl"
           />
           
-          {/* Small camera icon on top */}
-          <div className="absolute top-4 right-1/2 transform translate-x-1/2">
-            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
-              <Camera className="w-8 h-8 text-white" />
-            </div>
-          </div>
-          
-          {/* Large camera icon overlay */}
-          <div className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/3">
-            <div className="w-28 h-28 bg-primary rounded-full flex items-center justify-center">
-              <Camera className="w-14 h-14 text-white" />
+          {/* Camera icon overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-24 h-24 bg-[#1EAEDB] rounded-full flex items-center justify-center">
+              <Camera className="w-12 h-12 text-white" />
             </div>
           </div>
         </div>
@@ -64,10 +57,12 @@ const Index: React.FC = () => {
         
         <div className="w-full max-w-md space-y-4 px-4">
           <Button 
-            className="w-full h-14 text-lg bg-primary hover:bg-primary/90 text-white rounded-full shadow-md"
+            className="w-full h-14 text-lg bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-white rounded-full shadow-md"
             onClick={handleGetStarted}
+            icon={<ChevronRight size={20} />}
+            iconPosition="right"
           >
-            Snap Your Fridge <ChevronRight className="ml-1" size={20} />
+            Snap Your Fridge
           </Button>
           
           <div className="text-center pt-6">

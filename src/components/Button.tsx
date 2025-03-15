@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 export interface ButtonProps extends Omit<ShadcnButtonProps, 'asChild'> {
   isLoading?: boolean;
   icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   size = 'default',
   isLoading,
   icon,
+  iconPosition = 'left',
   disabled,
   ...props
 }) => {
@@ -34,8 +36,9 @@ const Button: React.FC<ButtonProps> = ({
         </>
       ) : (
         <>
-          {icon && <span className="mr-2">{icon}</span>}
+          {icon && iconPosition === 'left' && <span className="mr-2">{icon}</span>}
           {children}
+          {icon && iconPosition === 'right' && <span className="ml-2">{icon}</span>}
         </>
       )}
     </ShadcnButton>
