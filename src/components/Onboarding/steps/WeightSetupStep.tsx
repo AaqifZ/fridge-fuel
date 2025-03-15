@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
+import { Scale, TrendingUp } from 'lucide-react';
 
 interface WeightSetupStepProps {
   userDetails: {
@@ -98,16 +99,21 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
       
       <div className="space-y-8">
         {/* Current Weight with Slider */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <Label htmlFor="current-weight" className="text-base">Current Weight</Label>
+        <div className="space-y-4 bg-blue-50/30 p-4 rounded-xl">
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 rounded-full bg-blue-100 p-1.5">
+                <Scale className="h-5 w-5 text-blue-500" />
+              </div>
+              <Label htmlFor="current-weight" className="font-medium">Current Weight</Label>
+            </div>
             <div className="flex items-center gap-2">
               <Input
                 id="current-weight"
                 type="number"
                 value={userDetails.currentWeight || ''}
                 onChange={(e) => handleWeightChange('current', parseFloat(e.target.value) || 0)}
-                className="w-16 text-center p-1 h-8"
+                className="w-20 text-center p-1 h-10 rounded-lg"
               />
               <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
             </div>
@@ -129,16 +135,21 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
         </div>
         
         {/* Target Weight with Slider */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <Label htmlFor="target-weight" className="text-base">Target Weight</Label>
+        <div className="space-y-4 bg-blue-50/30 p-4 rounded-xl">
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 rounded-full bg-green-100 p-1.5">
+                <TrendingUp className="h-5 w-5 text-green-500" />
+              </div>
+              <Label htmlFor="target-weight" className="font-medium">Target Weight</Label>
+            </div>
             <div className="flex items-center gap-2">
               <Input
                 id="target-weight"
                 type="number"
                 value={userDetails.targetWeight || ''}
                 onChange={(e) => handleWeightChange('target', parseFloat(e.target.value) || 0)}
-                className="w-16 text-center p-1 h-8"
+                className="w-20 text-center p-1 h-10 rounded-lg"
               />
               <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
             </div>
