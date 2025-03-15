@@ -2,7 +2,7 @@
 import React from 'react';
 import { Check, Pencil } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { format, addMonths } from 'date-fns';
+import { format } from 'date-fns';
 
 interface SuccessStepProps {
   userDetails: {
@@ -12,6 +12,7 @@ interface SuccessStepProps {
     goalTimelineMonths?: number;
     proteinTarget?: number;
     weightUnit?: 'kg' | 'lbs';
+    goalDate?: string;
   };
   updateUserDetails: (details: Partial<SuccessStepProps['userDetails']>) => void;
 }
@@ -89,15 +90,16 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const weightDifference = Math.abs(targetWeight - currentWeight);
   const isGain = targetWeight > currentWeight;
   
-  // Calculate target date based on timeline
-  const months = userDetails.goalTimelineMonths || 3;
-  const targetDate = format(addMonths(new Date(), months), 'MMM d');
+  // Use the goal date from userDetails, or fall back to a computed date if not available
+  const targetDate = userDetails.goalDate || 
+    (userDetails.goalTimelineMonths ? 
+      format(new Date(new Date().setMonth(new Date().getMonth() + (userDetails.goalTimelineMonths || 3))), 'MMM d') : 
+      'N/A');
   
   // Calculate estimated nutrition values based on protein target
-  // These are simplified calculations for demo purposes
-  const calories = Math.round(proteinTarget * 24); // ~24 calories per gram of protein for overall diet
-  const carbs = Math.round(calories * 0.4 / 4); // 40% of calories from carbs, 4 calories per gram
-  const fats = Math.round(calories * 0.3 / 9); // 30% of calories from fats, 9 calories per gram
+  const calories = Math.round(proteinTarget * 24);
+  const carbs = Math.round(calories * 0.4 / 4);
+  const fats = Math.round(calories * 0.3 / 9);
   
   return (
     <div className="text-center space-y-4">

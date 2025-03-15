@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Beef, Calendar } from 'lucide-react';
@@ -12,6 +11,7 @@ interface ProteinTargetStepProps {
     proteinTarget?: number;
     weightUnit?: 'kg' | 'lbs';
     goalTimelineMonths?: number;
+    goalDate?: string;
     activityLevel?: 'sedentary' | 'moderate' | 'active';
   };
   updateUserDetails: (details: Partial<ProteinTargetStepProps['userDetails']>) => void;
@@ -25,12 +25,10 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
   const [baseGoalDate, setBaseGoalDate] = useState<Date | null>(null);
   const useKg = userDetails.weightUnit === 'kg';
   
-  // Calculate protein target and goal date based on the formula whenever relevant values change
   useEffect(() => {
     if (userDetails.currentWeight && userDetails.targetWeight && 
         userDetails.goalTimelineMonths && userDetails.activityLevel) {
       
-      // Convert weights to kg if using lbs
       const currentWeightKg = useKg 
         ? userDetails.currentWeight 
         : Math.round(userDetails.currentWeight * 0.453592);
@@ -39,7 +37,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         ? userDetails.targetWeight
         : Math.round(userDetails.targetWeight * 0.453592);
       
-      // Determine Activity Multiplier based on activity level
       let activityMultiplier = 0.5; // Default to moderate
       if (userDetails.activityLevel === 'sedentary') {
         activityMultiplier = 0.3;
@@ -47,7 +44,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         activityMultiplier = 0.7;
       }
       
-      // Determine Timeline Factor based on goal timeline
       let timelineFactor = 0.04; // Default to 6 months
       if (userDetails.goalTimelineMonths <= 3) {
         timelineFactor = 0.08;
@@ -55,7 +51,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         timelineFactor = 0.02;
       }
       
-      // Determine Activity Addition based on activity level
       let activityAddition = 0.3; // Default to moderate
       if (userDetails.activityLevel === 'sedentary') {
         activityAddition = 0.1;
@@ -63,33 +58,31 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         activityAddition = 0.6;
       }
       
-      // Calculate the components
       const baseProtein = currentWeightKg * 1.6;
       const growthFactor = (targetWeightKg - currentWeightKg) * activityMultiplier * timelineFactor;
       const activityAdjustment = currentWeightKg * activityAddition;
       
-      // Calculate total and round to nearest 5g
       let proteinTotal = baseProtein + growthFactor + activityAdjustment;
-      proteinTotal = Math.round(proteinTotal / 5) * 5; // Round to nearest 5g
+      proteinTotal = Math.round(proteinTotal / 5) * 5;
       
-      // Apply bounds (100g minimum, 250g maximum)
       proteinTotal = Math.max(100, Math.min(250, proteinTotal));
       
-      // Set the calculated protein value
       setCalculatedProtein(proteinTotal);
       
-      // Reset adjustment to zero when calculation changes
       setProteinAdjustment(0);
       setAdjustmentPercentage(0);
       
-      // Update the user details with the new protein target
       updateUserDetails({ proteinTarget: proteinTotal });
       
-      // Calculate and set base goal date
       const today = new Date();
       const achievementDate = addMonths(today, userDetails.goalTimelineMonths);
       setBaseGoalDate(achievementDate);
       setGoalDate(achievementDate);
+      
+      updateUserDetails({ 
+        proteinTarget: proteinTotal,
+        goalDate: format(achievementDate, 'MMM d')
+      });
       
       console.log('Protein calculation:', {
         currentWeightKg,
@@ -106,7 +99,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     }
   }, [userDetails.currentWeight, userDetails.targetWeight, userDetails.activityLevel, userDetails.goalTimelineMonths, userDetails.weightUnit]);
   
-  // Handle protein adjustment slider changes and recalculate goal date
   const handleProteinAdjustmentChange = (value: number[]) => {
     const newAdjustment = value[0];
     setProteinAdjustment(newAdjustment);
@@ -114,32 +106,24 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     const newTotal = calculatedProtein + newAdjustment;
     updateUserDetails({ proteinTarget: newTotal });
     
-    // Calculate percentage change from the baseline calculated value
     const percentageChange = (newAdjustment / calculatedProtein) * 100;
     setAdjustmentPercentage(percentageChange);
     
-    // Show warning for large adjustments (more than ±25%)
     if (Math.abs(percentageChange) > 25 && !adjustmentWarningShown) {
       toast.warning("This is a significant adjustment from the recommended amount");
       setAdjustmentWarningShown(true);
     }
     
-    // Adjust goal date based on protein adjustment if we have a base goal date
     if (baseGoalDate && userDetails.goalTimelineMonths) {
-      // Calculate a factor to modify the timeline based on protein adjustment
-      // FIXED LOGIC: More protein = faster progress (shorter timeline), less protein = slower progress (longer timeline)
-      // Negative percentage (less protein) should increase timeline factor (slow down progress)
-      // Positive percentage (more protein) should decrease timeline factor (speed up progress)
       const timelineAdjustmentFactor = 1 + (percentageChange * -0.01);
-      
-      // Calculate new timeline in days
-      const baseTimelineDays = userDetails.goalTimelineMonths * 30; // approximate
+      const baseTimelineDays = userDetails.goalTimelineMonths * 30;
       const adjustedTimelineDays = baseTimelineDays * timelineAdjustmentFactor;
       
-      // Calculate the adjusted goal date
       const today = new Date();
       const adjustedGoalDate = addDays(today, adjustedTimelineDays);
       setGoalDate(adjustedGoalDate);
+      
+      updateUserDetails({ goalDate: format(adjustedGoalDate, 'MMM d, yyyy') });
       
       console.log('Goal date adjustment:', {
         percentageChange,
@@ -152,14 +136,10 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     }
   };
   
-  // State to track if adjustment warning has been shown
   const [adjustmentWarningShown, setAdjustmentWarningShown] = useState(false);
   
-  // Protein visualization helper
   const getProteinVisualization = (proteinGrams: number) => {
-    // Approximate protein amounts in common foods
-    const chickenBreast = 25; // ~25g protein per chicken breast
-    
+    const chickenBreast = 25;
     const breasts = proteinGrams / chickenBreast;
     if (breasts < 5) {
       return `That's about ${Math.round(breasts)} chicken breasts worth of protein`;
@@ -168,7 +148,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     }
   };
   
-  // Format goal date
   const formattedGoalDate = goalDate ? format(goalDate, 'MMMM d, yyyy') : '';
   
   return (
@@ -180,7 +159,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         </p>
       </div>
       
-      {/* Protein Target Display */}
       <div className="mt-8 p-6 bg-secondary/20 rounded-xl space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -193,7 +171,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
           </div>
         </div>
         
-        {/* Goal Achievement Date */}
         {goalDate && (
           <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
             <Calendar className="h-5 w-5 text-blue-500" />
@@ -203,13 +180,11 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
           </div>
         )}
         
-        {/* Protein Visualization */}
         <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
           <Beef className="h-5 w-5 text-red-500" />
           <span>{userDetails.proteinTarget ? getProteinVisualization(userDetails.proteinTarget) : ''}</span>
         </div>
         
-        {/* Protein Target Adjustment */}
         <div className="pt-4">
           <div className="flex justify-between text-sm mb-2">
             <span>Fine-tune your target</span>
@@ -232,7 +207,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
           </div>
         </div>
         
-        {/* Formula Explanation - Optional */}
         <div className="mt-4 pt-4 border-t border-border/30 text-xs text-muted-foreground">
           <p>This target is calculated based on your current weight, goal weight, timeline, and activity level.</p>
         </div>
