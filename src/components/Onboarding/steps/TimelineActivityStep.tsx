@@ -36,9 +36,6 @@ const TimelineActivityStep: React.FC<TimelineActivityStepProps> = ({ userDetails
     <div className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold">Customize Your Journey</h2>
-        <p className="text-muted-foreground mt-1">
-          Let's personalize your plan based on your preferences
-        </p>
       </div>
 
       {/* Timeline Section */}
