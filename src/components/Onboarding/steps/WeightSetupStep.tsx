@@ -18,46 +18,27 @@ interface WeightSetupStepProps {
 const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUserDetails }) => {
   const [useKg, setUseKg] = useState<boolean>(userDetails.weightUnit === 'lbs' ? false : true);
   
-  // State to track slider value percentages for dumbbell positioning
-  const [currentWeightPercent, setCurrentWeightPercent] = useState(0);
-  const [targetWeightPercent, setTargetWeightPercent] = useState(0);
-  
   // Define slider min/max values based on units
-  const minWeight = useKg ? 55 : 121;  // 55kg or 121lbs
-  const maxWeight = useKg ? 130 : 286; // 130kg or 286lbs (130kg converted to lbs)
+  const minWeight = useKg ? 45 : 100;  // Lower minimum for more flexibility
+  const maxWeight = useKg ? 160 : 350; // Higher maximum for more flexibility
   
   // Initialize weights with defaults if not set
   useEffect(() => {
     const defaultCurrentWeight = useKg ? 70 : 154;
-    // If current weight not set, set it and calculate target weight
+    const defaultTargetWeight = useKg ? 77 : 170;
+    
     if (!userDetails.currentWeight) {
-      const currentWeight = defaultCurrentWeight;
-      const targetWeight = currentWeight + 7; // Add 7 kg or 7 lbs by default for bulking
-      updateUserDetails({ 
-        currentWeight: currentWeight,
-        targetWeight: targetWeight
-      });
-    } 
-    // If only target weight not set, calculate based on current
-    else if (!userDetails.targetWeight && userDetails.currentWeight) {
-      const targetWeight = userDetails.currentWeight + 7;
-      updateUserDetails({ targetWeight: targetWeight });
+      updateUserDetails({ currentWeight: defaultCurrentWeight });
+    }
+    
+    if (!userDetails.targetWeight) {
+      updateUserDetails({ targetWeight: defaultTargetWeight });
     }
     
     if (!userDetails.weightUnit) {
       updateUserDetails({ weightUnit: useKg ? 'kg' : 'lbs' });
     }
   }, []);
-
-  // Update percentage positions whenever weights or min/max change
-  useEffect(() => {
-    if (userDetails.currentWeight) {
-      setCurrentWeightPercent(calculatePercentage(userDetails.currentWeight));
-    }
-    if (userDetails.targetWeight) {
-      setTargetWeightPercent(calculatePercentage(userDetails.targetWeight));
-    }
-  }, [userDetails.currentWeight, userDetails.targetWeight, useKg]);
   
   // Toggle between kg and lbs
   const handleUnitToggle = (checked: boolean) => {
@@ -66,74 +47,63 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
     
     // Convert weights when switching units
     if (userDetails.currentWeight) {
-      let newCurrentWeight;
-      if (checked) {
-        // Convert lbs to kg
-        newCurrentWeight = Math.round(userDetails.currentWeight * 0.453592);
-      } else {
-        // Convert kg to lbs
-        newCurrentWeight = Math.round(userDetails.currentWeight * 2.20462);
-      }
-      updateUserDetails({ currentWeight: newCurrentWeight });
+      const newCurrentWeight = checked 
+        ? Math.round(userDetails.currentWeight * 0.453592) // lbs to kg
+        : Math.round(userDetails.currentWeight * 2.20462); // kg to lbs
       
-      // Always set target weight to current weight + 7 units
-      const newTargetWeight = newCurrentWeight + 7;
+      updateUserDetails({ currentWeight: newCurrentWeight });
+    }
+    
+    if (userDetails.targetWeight) {
+      const newTargetWeight = checked 
+        ? Math.round(userDetails.targetWeight * 0.453592) // lbs to kg
+        : Math.round(userDetails.targetWeight * 2.20462); // kg to lbs
+      
       updateUserDetails({ targetWeight: newTargetWeight });
     }
   };
   
-  // Calculate percentage position for dumbbell
-  const calculatePercentage = (weight: number) => {
-    if (!weight) return 0;
-    
-    return Math.max(0, Math.min(100, ((weight - minWeight) / (maxWeight - minWeight)) * 100));
-  };
-  
-  // Handle weight changes from slider
-  const handleSliderChange = (type: 'current' | 'target', values: number[]) => {
-    const value = values[0];
-    console.log(`${type} slider changed to:`, value);
-    
-    if (type === 'current') {
-      updateUserDetails({ currentWeight: value });
-      // Update target weight when current weight changes (if target is less than current)
-      if (userDetails.targetWeight && userDetails.targetWeight <= value) {
-        updateUserDetails({ targetWeight: value + 7 });
-      }
-    } else {
-      // Ensure target weight is always greater than current weight
-      if (userDetails.currentWeight && value <= userDetails.currentWeight) {
-        updateUserDetails({ targetWeight: userDetails.currentWeight + 1 });
-      } else {
-        updateUserDetails({ targetWeight: value });
-      }
-    }
-  };
-  
-  // Handle weight changes from direct input
-  const handleInputChange = (type: 'current' | 'target', value: number) => {
-    console.log(`${type} input changed to:`, value);
-    
+  // Handle current weight changes from slider or input
+  const handleCurrentWeightChange = (value: number) => {
     if (isNaN(value) || value < minWeight) {
       value = minWeight;
     } else if (value > maxWeight) {
       value = maxWeight;
     }
     
-    if (type === 'current') {
-      updateUserDetails({ currentWeight: value });
-      // Update target weight when current weight changes (if target is less than current)
-      if (userDetails.targetWeight && userDetails.targetWeight <= value) {
-        updateUserDetails({ targetWeight: value + 7 });
-      }
-    } else {
-      // Ensure target weight is always greater than current weight
-      if (userDetails.currentWeight && value <= userDetails.currentWeight) {
-        updateUserDetails({ targetWeight: userDetails.currentWeight + 1 });
-      } else {
-        updateUserDetails({ targetWeight: value });
-      }
+    updateUserDetails({ currentWeight: value });
+    
+    // Update target weight if it's less than current weight
+    if (userDetails.targetWeight && userDetails.targetWeight <= value) {
+      updateUserDetails({ targetWeight: value + (useKg ? 5 : 10) });
     }
+  };
+  
+  // Handle target weight changes from slider or input
+  const handleTargetWeightChange = (value: number) => {
+    if (isNaN(value) || value < minWeight) {
+      value = minWeight;
+    } else if (value > maxWeight) {
+      value = maxWeight;
+    }
+    
+    // Ensure target weight is greater than current weight
+    if (userDetails.currentWeight && value <= userDetails.currentWeight) {
+      value = userDetails.currentWeight + (useKg ? 1 : 2);
+    }
+    
+    updateUserDetails({ targetWeight: value });
+  };
+  
+  // Calculate percentage position for the visual indicators
+  const getCurrentWeightPercent = () => {
+    if (!userDetails.currentWeight) return 0;
+    return Math.max(0, Math.min(100, ((userDetails.currentWeight - minWeight) / (maxWeight - minWeight)) * 100));
+  };
+  
+  const getTargetWeightPercent = () => {
+    if (!userDetails.targetWeight) return 0;
+    return Math.max(0, Math.min(100, ((userDetails.targetWeight - minWeight) / (maxWeight - minWeight)) * 100));
   };
   
   return (
@@ -168,8 +138,8 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
               <Input
                 id="current-weight"
                 type="number"
-                value={userDetails.currentWeight || ''}
-                onChange={(e) => handleInputChange('current', parseFloat(e.target.value) || 0)}
+                value={userDetails.currentWeight || minWeight}
+                onChange={(e) => handleCurrentWeightChange(parseFloat(e.target.value))}
                 className="w-20 text-center p-1 h-10 text-lg font-medium"
                 min={minWeight}
                 max={maxWeight}
@@ -178,7 +148,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
             </div>
           </div>
           
-          <div className="relative py-6 mt-3">
+          <div className="relative py-8">
             {/* Current weight slider track with gradient */}
             <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 rounded-full overflow-hidden bg-gradient-to-r from-primary/40 to-secondary/40"></div>
             
@@ -187,18 +157,17 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
               min={minWeight}
               max={maxWeight}
               step={1}
-              onValueChange={(values) => handleSliderChange('current', values)}
-              className="z-10"
+              onValueChange={(values) => handleCurrentWeightChange(values[0])}
             />
             
             {/* Dumbbell indicator with bubble */}
             <div 
               className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-20"
-              style={{ left: `${currentWeightPercent}%` }}
+              style={{ left: `${getCurrentWeightPercent()}%` }}
             >
-              <div className="relative -mt-7">
-                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold rounded-full px-2 py-1 w-16 text-center">
-                  {userDetails.currentWeight || 0} {useKg ? 'kg' : 'lbs'}
+              <div className="relative -mt-10">
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold rounded-full px-2 py-1 min-w-16 text-center">
+                  {userDetails.currentWeight || minWeight} {useKg ? 'kg' : 'lbs'}
                 </div>
                 <div className="h-10 w-10 bg-white rounded-full shadow-md flex items-center justify-center -translate-x-1/2 border-2 border-primary">
                   <Dumbbell className="h-5 w-5 text-primary" />
@@ -208,8 +177,8 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
           </div>
           
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{useKg ? '55 kg' : '121 lbs'}</span>
-            <span>{useKg ? '130 kg' : '286 lbs'}</span>
+            <span>{minWeight} {useKg ? 'kg' : 'lbs'}</span>
+            <span>{maxWeight} {useKg ? 'kg' : 'lbs'}</span>
           </div>
         </div>
         
@@ -221,8 +190,8 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
               <Input
                 id="target-weight"
                 type="number"
-                value={userDetails.targetWeight || ''}
-                onChange={(e) => handleInputChange('target', parseFloat(e.target.value) || 0)}
+                value={userDetails.targetWeight || (userDetails.currentWeight ? userDetails.currentWeight + (useKg ? 5 : 10) : minWeight + (useKg ? 5 : 10))}
+                onChange={(e) => handleTargetWeightChange(parseFloat(e.target.value))}
                 className="w-20 text-center p-1 h-10 text-lg font-medium"
                 min={minWeight}
                 max={maxWeight}
@@ -231,27 +200,26 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
             </div>
           </div>
           
-          <div className="relative py-6 mt-3">
+          <div className="relative py-8">
             {/* Target weight slider track with gradient */}
             <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 rounded-full overflow-hidden bg-gradient-to-r from-primary/40 to-secondary/40"></div>
             
             <Slider
-              value={[userDetails.targetWeight || (userDetails.currentWeight ? userDetails.currentWeight + 7 : minWeight + 7)]}
+              value={[userDetails.targetWeight || (userDetails.currentWeight ? userDetails.currentWeight + (useKg ? 5 : 10) : minWeight + (useKg ? 5 : 10))]}
               min={minWeight}
               max={maxWeight}
               step={1}
-              onValueChange={(values) => handleSliderChange('target', values)}
-              className="z-10"
+              onValueChange={(values) => handleTargetWeightChange(values[0])}
             />
             
             {/* Dumbbell indicator with bubble */}
             <div 
               className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-20"
-              style={{ left: `${targetWeightPercent}%` }}
+              style={{ left: `${getTargetWeightPercent()}%` }}
             >
-              <div className="relative -mt-7">
-                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-bold rounded-full px-2 py-1 w-16 text-center">
-                  {userDetails.targetWeight || 0} {useKg ? 'kg' : 'lbs'}
+              <div className="relative -mt-10">
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-bold rounded-full px-2 py-1 min-w-16 text-center">
+                  {userDetails.targetWeight || (userDetails.currentWeight ? userDetails.currentWeight + (useKg ? 5 : 10) : minWeight + (useKg ? 5 : 10))} {useKg ? 'kg' : 'lbs'}
                 </div>
                 <div className="h-10 w-10 bg-white rounded-full shadow-md flex items-center justify-center -translate-x-1/2 border-2 border-secondary">
                   <Dumbbell className="h-5 w-5 text-secondary" />
@@ -261,8 +229,8 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
           </div>
           
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{useKg ? '55 kg' : '121 lbs'}</span>
-            <span>{useKg ? '130 kg' : '286 lbs'}</span>
+            <span>{minWeight} {useKg ? 'kg' : 'lbs'}</span>
+            <span>{maxWeight} {useKg ? 'kg' : 'lbs'}</span>
           </div>
         </div>
       </div>
