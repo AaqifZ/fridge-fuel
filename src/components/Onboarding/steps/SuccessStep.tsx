@@ -31,15 +31,15 @@ const CircularProgress = ({
   percentage?: number 
 }) => {
   // SVG circle properties
-  const size = 100; // Reduced from 120 for better consistency
-  const strokeWidth = 4; // Reduced from 5 for better proportions
+  const size = 80; // Reduced from 100 for better consistency
+  const strokeWidth = 3; // Reduced from 4 for better proportions
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-base font-medium mb-1">
+      <p className="text-sm font-medium mb-1">
         {label}
       </p>
       <div className="relative flex items-center justify-center">
@@ -68,11 +68,11 @@ const CircularProgress = ({
         </svg>
         {/* Center text */}
         <div className="absolute text-center">
-          <span className="text-lg font-bold">{value}{unit}</span>
+          <span className="text-sm font-semibold">{value}{unit}</span>
         </div>
         {/* Edit icon */}
         <div className="absolute bottom-0 right-0">
-          <Pencil size={16} className="text-muted-foreground hover:text-primary cursor-pointer" />
+          <Pencil size={14} className="text-muted-foreground hover:text-primary cursor-pointer" />
         </div>
       </div>
     </div>
@@ -103,31 +103,31 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const healthScore = Math.min(10, Math.max(1, Math.round((proteinTarget / (currentWeight * 2)) * 10)));
   
   return (
-    <div className="text-center space-y-6">
+    <div className="text-center space-y-4">
       <div className="flex justify-center">
-        <div className="rounded-full bg-primary/20 p-3 w-14 h-14 flex items-center justify-center">
-          <Check className="w-7 h-7 text-primary" />
+        <div className="rounded-full bg-primary/20 p-2 w-12 h-12 flex items-center justify-center">
+          <Check className="w-6 h-6 text-primary" />
         </div>
       </div>
       
       <div>
-        <h2 className="text-2xl font-bold">Congratulations</h2>
-        <p className="text-xl font-bold">your custom plan is ready!</p>
+        <h2 className="text-xl font-bold">Congratulations</h2>
+        <p className="text-base font-medium">your custom plan is ready!</p>
       </div>
       
-      <div className="py-2">
-        <p className="text-lg font-medium mb-2">You should {isGain ? 'gain' : 'lose'}:</p>
-        <div className="inline-block px-5 py-2 bg-primary/10 rounded-full">
-          <p className="text-xl font-bold">
+      <div className="py-1">
+        <p className="text-sm font-medium mb-1">You should {isGain ? 'gain' : 'lose'}:</p>
+        <div className="inline-block px-4 py-1.5 bg-primary/10 rounded-full">
+          <p className="text-base font-bold">
             {weightDifference} {weightUnit} by {targetDate}
           </p>
         </div>
       </div>
       
-      <div className="bg-secondary/20 rounded-xl p-3">
-        <div className="grid grid-cols-2 gap-3">
+      <div className="bg-secondary/20 rounded-lg p-3">
+        <div className="grid grid-cols-2 gap-2">
           <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <CircularProgress 
                 label="Calories" 
                 value={calories} 
@@ -139,7 +139,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
           </Card>
           
           <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <CircularProgress 
                 label="Carbs" 
                 value={carbs} 
@@ -151,7 +151,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
           </Card>
           
           <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <CircularProgress 
                 label="Protein" 
                 value={proteinTarget} 
@@ -163,7 +163,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
           </Card>
           
           <Card className="border-0 shadow-none bg-white">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <CircularProgress 
                 label="Fats" 
                 value={fats} 
@@ -175,12 +175,12 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
           </Card>
         </div>
         
-        <div className="flex items-center justify-between bg-white p-3 mt-3 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-primary fill-primary" />
-            <span className="text-base font-medium">Health Score</span>
+        <div className="flex items-center justify-between bg-white p-2 mt-2 rounded-lg">
+          <div className="flex items-center gap-1.5">
+            <Heart className="h-4 w-4 text-primary fill-primary" />
+            <span className="text-sm font-medium">Health Score</span>
           </div>
-          <span className="text-base font-bold">{healthScore}/10</span>
+          <span className="text-sm font-bold">{healthScore}/10</span>
         </div>
       </div>
     </div>
