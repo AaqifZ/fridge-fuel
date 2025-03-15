@@ -89,8 +89,8 @@ const OnboardingWizard = () => {
   const totalStepsShown = steps.length - 1;
   const currentVisibleStep = currentStep === 0 ? 1 : currentStep;
   
-  // Calculate optimal content height
-  const contentHeight = isMobile ? 'min-h-[550px]' : 'min-h-[600px]';
+  // Set FIXED height for content instead of minimum height to ensure consistency
+  const contentHeight = isMobile ? 'h-[580px]' : 'h-[620px]';
   
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-secondary/10">
@@ -111,13 +111,15 @@ const OnboardingWizard = () => {
             </div>
           </div>
           
-          {/* Content container with ScrollArea for overflow */}
-          <div className={`${contentHeight}`}>
+          {/* Content container with fixed height and ScrollArea for overflow */}
+          <div className={`${contentHeight} relative overflow-hidden`}>
             <ScrollArea className="h-full pr-4">
-              <CurrentStepComponent 
-                userDetails={userDetails}
-                updateUserDetails={updateUserDetails}
-              />
+              <div className="pb-4">
+                <CurrentStepComponent 
+                  userDetails={userDetails}
+                  updateUserDetails={updateUserDetails}
+                />
+              </div>
             </ScrollArea>
           </div>
         </div>
