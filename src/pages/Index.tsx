@@ -7,23 +7,14 @@ import { useOnboarding } from '@/hooks/useOnboarding';
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
-  const { isCompleted, resetOnboarding } = useOnboarding();
+  const { resetOnboarding } = useOnboarding();
   
-  // Check for completed onboarding on first load
-  useEffect(() => {
-    console.log("Index page loaded - Onboarding status:", isCompleted);
-  }, [isCompleted]);
-  
+  // Always force users through onboarding
   const handleGetStarted = () => {
-    // For new users, always reset onboarding to ensure a fresh start
-    if (!isCompleted) {
-      console.log("New user detected, resetting onboarding state");
-      resetOnboarding();
-      navigate('/onboarding');
-    } else {
-      console.log("Returning user, going to analyze");
-      navigate('/analyze');
-    }
+    // Reset onboarding state to ensure a fresh start
+    console.log("Directing user to onboarding");
+    resetOnboarding();
+    navigate('/onboarding');
   };
 
   return (

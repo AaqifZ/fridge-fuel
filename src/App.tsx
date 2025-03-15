@@ -72,9 +72,15 @@ const AppContent = () => {
             path="/analyze" 
             element={isCompleted ? <Analyze /> : <Navigate to="/onboarding" />} 
           />
+          <Route 
+            path="/calculator" 
+            element={isCompleted ? <Calculator /> : <Navigate to="/onboarding" />} 
+          />
+          <Route 
+            path="/recipes" 
+            element={isCompleted ? <Recipes /> : <Navigate to="/onboarding" />} 
+          />
           <Route path="/onboarding" element={<OnboardingWizard />} />
-          <Route path="/calculator" element={<Calculator />} />
-          <Route path="/recipes" element={<Recipes />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
