@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Beef, Calendar, FlaskConical } from 'lucide-react';
@@ -52,30 +51,18 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
   };
   
   const getProteinSourcesBreakdown = (proteinGrams: number) => {
-    const proteinShake = 25; // 25g per shake
-    const chickenBreast = 30; // 30g per medium breast
-    const greekYogurt = 15;  // 15g per cup
-    const eggWhites = 4;     // 4g per egg white
-    const cottageCheese = 12; // 12g per 1/2 cup
-    const proteinBar = 20;   // 20g per bar
-    
-    let plan = [];
-    
     if (proteinGrams > 160) {
-      plan.push(`Fuel up with 3 protein shakes (${3 * proteinShake}g), 2 juicy chicken breasts (${2 * chickenBreast}g), a creamy cup of Greek yogurt (${greekYogurt}g), and a convenient protein bar (${proteinBar}g)!`);
+      return "Reach your goal with homemade meals like a hearty lentil soup (28g), a savory chicken stir-fry (35g), a protein-rich pasta with turkey meatballs (38g), and a quinoa bowl with roasted vegetables (25g).";
     } 
     else if (proteinGrams >= 120) {
-      plan.push(`Power through with 2 protein shakes, a tender chicken breast, a cup of Greek yogurt, and a tasty protein bar!`);
+      return "Reach your goal with homemade meals like a quick veggie-packed frittata (24g), a savory chicken stir-fry (35g), and a protein-rich pasta with turkey meatballs (38g).";
     } 
     else if (proteinGrams >= 100) {
-      plan.push(`Knock out your goals with a protein shake, a lean chicken breast, and a hearty cup of cottage cheese!`);
+      return "Boost your protein with homemade meals like a bean and vegetable chili (20g), a grilled salmon with roasted sweet potatoes (30g), and a Greek yogurt parfait with nuts and berries (15g).";
     }
     else {
-      // For protein under 100g (though our app sets minimum to 100g)
-      plan.push(`Start strong with a protein shake and a chicken breast to hit your essential protein needs!`);
+      return "Start your day with protein-packed meals like an egg and avocado toast (15g), a hearty lentil soup (18g), and a bean burrito bowl (22g).";
     }
-    
-    return plan.join(' ');
   };
   
   useEffect(() => {
@@ -118,7 +105,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       let proteinTotal = baseProtein + growthFactor + activityAdjustment;
       proteinTotal = Math.round(proteinTotal / 5) * 5;
       
-      // Set minimum to 100g for protein
       proteinTotal = Math.max(100, Math.min(250, proteinTotal));
       
       setCalculatedProtein(proteinTotal);
