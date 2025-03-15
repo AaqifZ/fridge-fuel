@@ -110,7 +110,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
       </div>
       
       {/* Unit toggle switch */}
-      <div className="flex items-center justify-center space-x-4 my-4">
+      <div className="flex items-center justify-center space-x-4 my-6">
         <span className={`text-sm font-medium ${!useKg ? 'text-primary' : 'text-muted-foreground'}`}>
           lbs
         </span>
@@ -123,36 +123,49 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
         </span>
       </div>
       
-      <div className="space-y-8">
+      <div className="space-y-10">
         {/* Current Weight with Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <Label htmlFor="current-weight" className="text-base">Current Weight</Label>
+            <Label htmlFor="current-weight" className="text-base font-medium">Current Weight</Label>
             <div className="flex items-center gap-2">
               <Input
                 id="current-weight"
                 type="number"
                 value={userDetails.currentWeight || ''}
                 onChange={(e) => handleWeightChange('current', parseFloat(e.target.value) || 0)}
-                className="w-16 text-center p-1 h-8"
+                className="w-20 text-center p-1 h-10 text-lg font-medium"
               />
               <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
             </div>
           </div>
           
-          <div className="relative py-4">
+          <div className="relative py-6 mt-3">
+            {/* Current weight slider track with gradient */}
+            <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 rounded-full overflow-hidden bg-gradient-to-r from-primary/40 to-secondary/40"></div>
+            
             <Slider
               value={[userDetails.currentWeight || 0]}
               min={minWeight}
               max={maxWeight}
               step={1}
               onValueChange={(values) => handleWeightChange('current', values[0])}
+              className="z-10"
             />
+            
+            {/* Dumbbell indicator with bubble */}
             <div 
-              className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10"
+              className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-20"
               style={{ left: `${currentWeightPercent}%` }}
             >
-              <Dumbbell className="h-6 w-6 text-primary -translate-x-1/2" />
+              <div className="relative -mt-7">
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold rounded-full px-2 py-1 w-16 text-center">
+                  {userDetails.currentWeight || 0} {useKg ? 'kg' : 'lbs'}
+                </div>
+                <div className="h-10 w-10 bg-white rounded-full shadow-md flex items-center justify-center -translate-x-1/2 border-2 border-primary">
+                  <Dumbbell className="h-5 w-5 text-primary" />
+                </div>
+              </div>
             </div>
           </div>
           
@@ -165,32 +178,45 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
         {/* Target Weight with Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <Label htmlFor="target-weight" className="text-base">Target Weight</Label>
+            <Label htmlFor="target-weight" className="text-base font-medium">Target Weight</Label>
             <div className="flex items-center gap-2">
               <Input
                 id="target-weight"
                 type="number"
                 value={userDetails.targetWeight || ''}
                 onChange={(e) => handleWeightChange('target', parseFloat(e.target.value) || 0)}
-                className="w-16 text-center p-1 h-8"
+                className="w-20 text-center p-1 h-10 text-lg font-medium"
               />
               <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
             </div>
           </div>
           
-          <div className="relative py-4">
+          <div className="relative py-6 mt-3">
+            {/* Target weight slider track with gradient */}
+            <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 rounded-full overflow-hidden bg-gradient-to-r from-primary/40 to-secondary/40"></div>
+            
             <Slider
               value={[userDetails.targetWeight || 0]}
               min={minWeight}
               max={maxWeight}
               step={1}
               onValueChange={(values) => handleWeightChange('target', values[0])}
+              className="z-10"
             />
+            
+            {/* Dumbbell indicator with bubble */}
             <div 
-              className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10"
+              className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-20"
               style={{ left: `${targetWeightPercent}%` }}
             >
-              <Dumbbell className="h-6 w-6 text-primary -translate-x-1/2" />
+              <div className="relative -mt-7">
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-bold rounded-full px-2 py-1 w-16 text-center">
+                  {userDetails.targetWeight || 0} {useKg ? 'kg' : 'lbs'}
+                </div>
+                <div className="h-10 w-10 bg-white rounded-full shadow-md flex items-center justify-center -translate-x-1/2 border-2 border-secondary">
+                  <Dumbbell className="h-5 w-5 text-secondary" />
+                </div>
+              </div>
             </div>
           </div>
           
