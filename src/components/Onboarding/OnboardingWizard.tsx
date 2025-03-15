@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import WelcomeStep from './steps/WelcomeStep';
-import GenderSelectionStep from './steps/GenderSelectionStep';
+import GoalSetupStep from './steps/GoalSetupStep';
 import WorkoutFrequencyStep from './steps/WorkoutFrequencyStep';
 import BasicInfoStep from './steps/BasicInfoStep';
 import GoalSelectionStep from './steps/GoalSelectionStep';
@@ -22,10 +21,10 @@ const OnboardingWizard = () => {
     updateUserDetails 
   } = useOnboarding();
   
-  const { calculateProteinNeeds, setProteinTarget } = useProteinCalculator();
+  const { setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
   
-  // Set to gender selection step (index 1) when component mounts, skipping welcome step
+  // Set to goal setup step (index 1) when component mounts, skipping welcome step
   useEffect(() => {
     setCurrentStep(1);
   }, [setCurrentStep]);
@@ -35,10 +34,10 @@ const OnboardingWizard = () => {
     return <Navigate to="/analyze" />;
   }
   
-  // Keep the welcome step in the array but start from gender step
+  // Keep the welcome step in the array but start from goal setup step
   const steps = [
     { id: 'welcome', component: WelcomeStep },
-    { id: 'gender', component: GenderSelectionStep },
+    { id: 'goal-setup', component: GoalSetupStep },
     { id: 'workout-frequency', component: WorkoutFrequencyStep },
     { id: 'basic-info', component: BasicInfoStep },
     { id: 'goal', component: GoalSelectionStep },
@@ -48,9 +47,9 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
-    // For the gender step, we need to validate selection before proceeding
-    if (currentStep === 1 && !userDetails.gender) {
-      toast.error("Please select your gender to continue");
+    // For the goal setup step, we need to validate selection before proceeding
+    if (currentStep === 1 && (!userDetails.currentWeight || !userDetails.targetWeight)) {
+      toast.error("Please enter your current and target weights to continue");
       return;
     }
     
@@ -72,21 +71,9 @@ const OnboardingWizard = () => {
   };
   
   const handleComplete = () => {
-    const { weight, height, age, gender, activityLevel, goal, workoutFrequency } = userDetails;
-    
-    // Calculate protein target based on user data
-    if (weight && height && age && gender && activityLevel && goal) {
-      const proteinTarget = calculateProteinNeeds(
-        weight, 
-        height, 
-        age, 
-        gender, 
-        activityLevel, 
-        goal,
-        workoutFrequency // This is now an optional parameter
-      );
-      
-      setProteinTarget(proteinTarget);
+    // Set the protein target from the goalSetup step directly
+    if (userDetails.proteinTarget) {
+      setProteinTarget(userDetails.proteinTarget);
       setIsCompleted(true);
       toast.success("Let's analyze your fridge and hit your protein goals!");
       navigate('/analyze');
