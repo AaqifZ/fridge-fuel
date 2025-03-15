@@ -27,7 +27,7 @@ const Index: React.FC = () => {
           <div className="font-bold text-2xl text-primary">BulkAI</div>
         </div>
         
-        {/* Hero image - now showing an open refrigerator with ingredients */}
+        {/* Hero image - showing a refrigerator filled with food items */}
         <div className="relative w-56 h-56 mb-8">
           <div className="absolute inset-0 flex items-center justify-center z-10">
             <div className="w-16 h-16 bg-primary/90 rounded-full flex items-center justify-center">
@@ -35,8 +35,8 @@ const Index: React.FC = () => {
             </div>
           </div>
           <img 
-            src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9" 
-            alt="Open refrigerator with ingredients" 
+            src="/lovable-uploads/48950a23-302f-4015-87c5-6ddc85fbea8d.png" 
+            alt="Open refrigerator filled with food items" 
             className="w-full h-full object-cover rounded-2xl shadow-lg"
           />
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/40 to-transparent"></div>
