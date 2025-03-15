@@ -19,12 +19,12 @@ const GenderSelectionStep: React.FC<GenderSelectionStepProps> = ({
   onBack 
 }) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="mb-10">
-        <h2 className="text-4xl font-bold tracking-tight">Choose your Gender</h2>
-        <p className="text-muted-foreground mt-3 text-lg">
-          This will be used to calibrate your custom plan.
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold tracking-tight">Choose your Gender</h2>
+        <p className="text-muted-foreground mt-2">
+          This will be used to calibrate your custom protein plan.
         </p>
       </div>
       
@@ -32,21 +32,21 @@ const GenderSelectionStep: React.FC<GenderSelectionStepProps> = ({
       <RadioGroup
         value={userDetails.gender}
         onValueChange={(value) => updateUserDetails({ gender: value as 'male' | 'female' | 'other' })}
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-3"
       >
-        <div className={`flex items-center justify-center h-16 rounded-xl transition-all cursor-pointer ${userDetails.gender === 'male' ? 'bg-primary/10 border-2 border-primary' : 'bg-secondary/5 hover:bg-secondary/10 border border-secondary/20'}`}>
-          <RadioGroupItem value="male" id="male" className="hidden" />
-          <Label htmlFor="male" className="cursor-pointer text-xl font-medium">Male</Label>
+        <div className="flex items-center space-x-2 rounded-xl p-4 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+          <RadioGroupItem value="male" id="male" className="mr-2" />
+          <Label htmlFor="male" className="flex-1 cursor-pointer text-xl font-medium">Male</Label>
         </div>
         
-        <div className={`flex items-center justify-center h-16 rounded-xl transition-all cursor-pointer ${userDetails.gender === 'female' ? 'bg-primary/10 border-2 border-primary' : 'bg-secondary/5 hover:bg-secondary/10 border border-secondary/20'}`}>
-          <RadioGroupItem value="female" id="female" className="hidden" />
-          <Label htmlFor="female" className="cursor-pointer text-xl font-medium">Female</Label>
+        <div className="flex items-center space-x-2 rounded-xl p-4 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+          <RadioGroupItem value="female" id="female" className="mr-2" />
+          <Label htmlFor="female" className="flex-1 cursor-pointer text-xl font-medium">Female</Label>
         </div>
         
-        <div className={`flex items-center justify-center h-16 rounded-xl transition-all cursor-pointer ${userDetails.gender === 'other' ? 'bg-primary/10 border-2 border-primary' : 'bg-secondary/5 hover:bg-secondary/10 border border-secondary/20'}`}>
-          <RadioGroupItem value="other" id="other" className="hidden" />
-          <Label htmlFor="other" className="cursor-pointer text-xl font-medium">Other</Label>
+        <div className="flex items-center space-x-2 rounded-xl p-4 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+          <RadioGroupItem value="other" id="other" className="mr-2" />
+          <Label htmlFor="other" className="flex-1 cursor-pointer text-xl font-medium">Other</Label>
         </div>
       </RadioGroup>
       

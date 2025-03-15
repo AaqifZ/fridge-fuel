@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { Clock, Dumbbell, ChefHat } from 'lucide-react';
 import { Recipe } from '@/hooks/useRecipes';
-import Button from '@/components/Button';
+import Button from './Button';
 
 interface RecipeCardProps {
   recipe: Recipe;

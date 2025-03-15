@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Camera, Upload, RefreshCw, Trash2, Refrigerator } from 'lucide-react';
-import Button from '@/components/Button';
+import Button from './Button';
 import { toast } from 'sonner';
 
 interface RefrigeratorAnalysisProps {

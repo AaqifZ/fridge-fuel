@@ -14,41 +14,58 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import OnboardingWizard from "./components/Onboarding/OnboardingWizard";
 
-// Create a singleton QueryClient instance
 const queryClient = new QueryClient();
 
 const App = () => {
-  console.log("App component rendering");
-  
+  // Add smooth page transitions
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    
+    const elements = document.querySelectorAll('main, section, article');
+    elements.forEach((el) => observer.observe(el));
+    
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner position="top-center" />
         <BrowserRouter>
-          <AppRoutes />
+          <AppContent />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   );
 };
 
-// Separate component to handle routing
-const AppRoutes = () => {
+// Separate component to access routing inside useEffect
+const AppContent = () => {
   const { isCompleted } = useOnboarding();
   const location = useLocation();
   
   // Hide navbar on index page and onboarding
   const showNavbar = location.pathname !== '/' && location.pathname !== '/onboarding';
   
-  useEffect(() => {
-    console.log("Current route:", location.pathname);
-  }, [location.pathname]);
+  // For debugging
+  console.log("App routing - Onboarding completed:", isCompleted);
   
   return (
     <>
       {showNavbar && <Navbar />}
-      <div className="app-content">
+      <div className="relative z-0">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route 
