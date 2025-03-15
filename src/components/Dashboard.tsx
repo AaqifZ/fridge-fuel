@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calculator, Camera, ChefHat, TrendingUp } from 'lucide-react';
 import ProgressBar from './ProgressBar';
-import Button from './Button';
+import Button from '@/components/Button';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 
 const Dashboard: React.FC = () => {

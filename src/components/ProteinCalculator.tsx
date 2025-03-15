@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { Dumbbell, Calculator, CircleCheck } from 'lucide-react';
-import Button from './Button';
+import Button from '@/components/Button';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 
 interface FormData {
