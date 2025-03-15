@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -5,6 +6,7 @@ import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import WelcomeStep from './steps/WelcomeStep';
 import GenderSelectionStep from './steps/GenderSelectionStep';
+import WorkoutFrequencyStep from './steps/WorkoutFrequencyStep';
 import BasicInfoStep from './steps/BasicInfoStep';
 import GoalSelectionStep from './steps/GoalSelectionStep';
 import SuccessStep from './steps/SuccessStep';
@@ -37,6 +39,7 @@ const OnboardingWizard = () => {
   const steps = [
     { id: 'welcome', component: WelcomeStep },
     { id: 'gender', component: GenderSelectionStep },
+    { id: 'workout-frequency', component: WorkoutFrequencyStep },
     { id: 'basic-info', component: BasicInfoStep },
     { id: 'goal', component: GoalSelectionStep },
     { id: 'success', component: SuccessStep },
@@ -48,6 +51,12 @@ const OnboardingWizard = () => {
     // For the gender step, we need to validate selection before proceeding
     if (currentStep === 1 && !userDetails.gender) {
       toast.error("Please select your gender to continue");
+      return;
+    }
+    
+    // For the workout frequency step, validate selection before proceeding
+    if (currentStep === 2 && !userDetails.workoutFrequency) {
+      toast.error("Please select your workout frequency to continue");
       return;
     }
     
@@ -63,7 +72,7 @@ const OnboardingWizard = () => {
   };
   
   const handleComplete = () => {
-    const { weight, height, age, gender, activityLevel, goal } = userDetails;
+    const { weight, height, age, gender, activityLevel, goal, workoutFrequency } = userDetails;
     
     // Calculate protein target based on user data
     if (weight && height && age && gender && activityLevel && goal) {
@@ -73,7 +82,8 @@ const OnboardingWizard = () => {
         age, 
         gender, 
         activityLevel, 
-        goal
+        goal,
+        workoutFrequency
       );
       
       setProteinTarget(proteinTarget);
@@ -125,9 +135,9 @@ const OnboardingWizard = () => {
             {currentStep < steps.length - 1 ? (
               <Button 
                 onClick={handleNext} 
-                className={currentStep === 1 ? "w-full py-3 text-lg rounded-full" : ""}
+                className={currentStep === 1 || currentStep === 2 ? "w-full py-3 text-lg rounded-full" : ""}
               >
-                {currentStep === 1 ? "Continue" : "Continue"}
+                Continue
               </Button>
             ) : (
               <Button onClick={handleComplete}>

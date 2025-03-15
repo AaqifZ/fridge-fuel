@@ -10,6 +10,7 @@ interface OnboardingState {
     height?: number;
     age?: number;
     gender?: 'male' | 'female' | 'other';
+    workoutFrequency?: string;
     activityLevel?: string;
     goal?: string;
   };
@@ -41,7 +42,7 @@ export const useOnboarding = create<OnboardingState>()(
     {
       name: 'onboarding-storage',
       // Add a version to bust any existing storage
-      version: 2,
+      version: 3,
     }
   )
 );
