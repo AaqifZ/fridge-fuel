@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Beef, Calendar, FlaskConical } from 'lucide-react';
@@ -34,11 +33,11 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     const gramsPerKg = (proteinTarget / weightInKg).toFixed(1);
     
     if (activityLevel === 'active') {
-      return `${proteinTarget}g (${gramsPerKg}g/kg) optimizes muscle protein synthesis for your active lifestyle while staying within healthy kidney parameters.`;
+      return `${gramsPerKg}g/kg optimizes muscle protein synthesis for your active lifestyle.`;
     } else if (activityLevel === 'moderate') {
-      return `${proteinTarget}g (${gramsPerKg}g/kg) supports your activity level for optimal recovery while maintaining metabolic health.`;
+      return `${gramsPerKg}g/kg supports recovery while maintaining metabolic health.`;
     } else {
-      return `${proteinTarget}g (${gramsPerKg}g/kg) provides the amino acids needed for your body weight while preventing muscle loss.`;
+      return `${gramsPerKg}g/kg prevents muscle loss while supporting overall health.`;
     }
   };
   
@@ -61,7 +60,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       remainingProtein -= 3 * proteinShake;
       plan.push(`2 chicken breasts (${2 * chickenBreast}g)`);
       remainingProtein -= 2 * chickenBreast;
-      plan.push(`1 cup of Greek yogurt (${greekYogurt}g)`);
+      plan.push(`1 cup Greek yogurt (${greekYogurt}g)`);
       remainingProtein -= greekYogurt;
       plan.push(`1 protein bar (${proteinBar}g)`);
       remainingProtein -= proteinBar;
@@ -72,7 +71,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       remainingProtein -= 2 * proteinShake;
       plan.push(`1 chicken breast (${chickenBreast}g)`);
       remainingProtein -= chickenBreast;
-      plan.push(`1 cup of Greek yogurt (${greekYogurt}g)`);
+      plan.push(`1 cup Greek yogurt (${greekYogurt}g)`);
       remainingProtein -= greekYogurt;
       plan.push(`1 protein bar (${proteinBar}g)`);
       remainingProtein -= proteinBar;
@@ -83,7 +82,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       remainingProtein -= proteinShake;
       plan.push(`1 chicken breast (${chickenBreast}g)`);
       remainingProtein -= chickenBreast;
-      plan.push(`1 cup of cottage cheese (${cottageCheese * 2}g)`);
+      plan.push(`1 cup cottage cheese (${cottageCheese * 2}g)`);
       remainingProtein -= cottageCheese * 2;
     }
     
@@ -95,7 +94,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       }
     }
     
-    return `Daily protein plan: ${plan.join(', ')}`;
+    return plan.join(', ');
   };
   
   useEffect(() => {
@@ -211,34 +210,20 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
   
   const [adjustmentWarningShown, setAdjustmentWarningShown] = useState(false);
   
-  const getProteinVisualization = (proteinGrams: number) => {
-    const chickenBreast = 25;
-    const breasts = proteinGrams / chickenBreast;
-    if (breasts < 5) {
-      return `That's about ${Math.round(breasts)} chicken breasts worth of protein`;
-    } else {
-      return `That's equivalent to ${Math.round(breasts)} chicken breasts per day`;
-    }
-  };
-  
   const formattedGoalDate = goalDate ? format(goalDate, 'MMMM d, yyyy') : '';
   
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Daily Protein Target</h2>
-        <p className="text-muted-foreground mt-1">
-          Based on your goals, here's your recommended daily protein intake
-        </p>
+        <h2 className="text-2xl font-bold">Your Protein Plan</h2>
       </div>
       
-      <div className="mt-8 p-6 bg-secondary/20 rounded-xl space-y-4">
+      <div className="mt-6 p-6 bg-secondary/20 rounded-xl space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-medium">Daily Protein Target</h3>
-            <p className="text-muted-foreground text-sm">Customized to your goals</p>
+            <p className="text-muted-foreground text-sm">Customized daily target</p>
           </div>
-          <div className="text-4xl font-bold text-primary flex items-baseline">
+          <div className="text-5xl font-bold text-primary flex items-baseline">
             {userDetails.proteinTarget || 0}
             <span className="text-sm font-normal ml-1">g</span>
           </div>
@@ -246,7 +231,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
 
         {/* Scientific explanation */}
         <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
-          <FlaskConical className="h-5 w-5 text-purple-500" />
+          <FlaskConical className="h-5 w-5 text-purple-500 flex-shrink-0" />
           <span>
             {userDetails.proteinTarget && userDetails.currentWeight ? 
               getScientificExplanation(userDetails.proteinTarget, userDetails.currentWeight, userDetails.activityLevel) : 
@@ -256,24 +241,24 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         
         {goalDate && (
           <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
-            <Calendar className="h-5 w-5 text-blue-500" />
+            <Calendar className="h-5 w-5 text-blue-500 flex-shrink-0" />
             <span>
-              You're expected to reach your weight goal by <strong>{formattedGoalDate}</strong> with this plan.
+              Target date: <strong>{formattedGoalDate}</strong>
             </span>
           </div>
         )}
         
         {/* Actionable protein sources breakdown */}
         <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
-          <Beef className="h-5 w-5 text-red-500" />
+          <Beef className="h-5 w-5 text-red-500 flex-shrink-0" />
           <span className="flex-1">
-            {userDetails.proteinTarget ? getProteinSourcesBreakdown(userDetails.proteinTarget) : ''}
+            <strong>Daily meal plan:</strong> {userDetails.proteinTarget ? getProteinSourcesBreakdown(userDetails.proteinTarget) : ''}
           </span>
         </div>
         
         <div className="pt-4">
           <div className="flex justify-between text-sm mb-2">
-            <span>Fine-tune your target</span>
+            <span>Personalize</span>
             <span className={`font-medium ${Math.abs(adjustmentPercentage) > 25 ? 'text-orange-500' : ''}`}>
               {proteinAdjustment > 0 ? '+' : ''}{proteinAdjustment}g 
               {adjustmentPercentage !== 0 && ` (${adjustmentPercentage > 0 ? '+' : ''}${Math.round(adjustmentPercentage)}%)`}
@@ -288,13 +273,13 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
             onValueChange={handleProteinAdjustmentChange}
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-2">
-            <span>Less protein</span>
-            <span>More protein</span>
+            <span>Less</span>
+            <span>More</span>
           </div>
         </div>
         
         <div className="mt-4 pt-4 border-t border-border/30 text-xs text-muted-foreground">
-          <p>This target is calculated based on your current weight, goal weight, timeline, and activity level.</p>
+          <p>Calculated based on your weight, goals, and activity level</p>
         </div>
       </div>
     </div>
