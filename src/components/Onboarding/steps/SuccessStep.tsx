@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Camera, CircleCheck } from 'lucide-react';
+import { Camera, CircleCheck, Scale } from 'lucide-react';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 
 interface SuccessStepProps {
@@ -10,12 +10,14 @@ interface SuccessStepProps {
     activityLevel?: string;
     goalTimelineMonths?: number;
     proteinTarget?: number;
+    weightUnit?: 'kg' | 'lbs';
   };
   updateUserDetails: (details: Partial<SuccessStepProps['userDetails']>) => void;
 }
 
 const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const { proteinTarget } = useProteinCalculator();
+  const weightUnit = userDetails.weightUnit || 'kg';
   
   return (
     <div className="text-center space-y-6 py-4">
@@ -27,9 +29,25 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
       
       <h2 className="text-2xl font-bold">You're All Set!</h2>
       
-      <div>
-        <p className="text-lg font-medium">Your Daily Protein Target</p>
-        <p className="text-3xl font-bold text-primary mt-1">{proteinTarget}g</p>
+      <div className="space-y-4">
+        {/* Protein Target */}
+        <div>
+          <p className="text-lg font-medium">Your Daily Protein Target</p>
+          <p className="text-3xl font-bold text-primary mt-1">{proteinTarget}g</p>
+        </div>
+        
+        {/* Weight Goal */}
+        {userDetails.targetWeight && (
+          <div className="bg-muted/40 p-4 rounded-lg">
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <Scale className="w-5 h-5 text-blue-500" />
+              <p className="font-medium">Weight Goal</p>
+            </div>
+            <p className="text-2xl font-bold">
+              {userDetails.targetWeight} {weightUnit}
+            </p>
+          </div>
+        )}
       </div>
       
       <div className="p-4 bg-muted/40 rounded-lg mt-4">

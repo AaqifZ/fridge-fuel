@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Beef, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
-import { format, addMonths } from 'date-fns';
+import { format, addMonths, addDays } from 'date-fns';
 
 interface ProteinTargetStepProps {
   userDetails: {
@@ -22,6 +22,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
   const [proteinAdjustment, setProteinAdjustment] = useState<number>(0);
   const [adjustmentPercentage, setAdjustmentPercentage] = useState<number>(0);
   const [goalDate, setGoalDate] = useState<Date | null>(null);
+  const [baseGoalDate, setBaseGoalDate] = useState<Date | null>(null);
   const useKg = userDetails.weightUnit === 'kg';
   
   // Calculate protein target and goal date based on the formula whenever relevant values change
@@ -84,9 +85,10 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       // Update the user details with the new protein target
       updateUserDetails({ proteinTarget: proteinTotal });
       
-      // Calculate and set goal date
+      // Calculate and set base goal date
       const today = new Date();
       const achievementDate = addMonths(today, userDetails.goalTimelineMonths);
+      setBaseGoalDate(achievementDate);
       setGoalDate(achievementDate);
       
       console.log('Protein calculation:', {
@@ -104,7 +106,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     }
   }, [userDetails.currentWeight, userDetails.targetWeight, userDetails.activityLevel, userDetails.goalTimelineMonths, userDetails.weightUnit]);
   
-  // Handle protein adjustment slider changes
+  // Handle protein adjustment slider changes and recalculate goal date
   const handleProteinAdjustmentChange = (value: number[]) => {
     const newAdjustment = value[0];
     setProteinAdjustment(newAdjustment);
@@ -120,6 +122,31 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     if (Math.abs(percentageChange) > 25 && !adjustmentWarningShown) {
       toast.warning("This is a significant adjustment from the recommended amount");
       setAdjustmentWarningShown(true);
+    }
+    
+    // Adjust goal date based on protein adjustment if we have a base goal date
+    if (baseGoalDate && userDetails.goalTimelineMonths) {
+      // Calculate a factor to modify the timeline based on protein adjustment
+      // More protein = faster progress, less protein = slower progress
+      const timelineAdjustmentFactor = 1 - (percentageChange / 100);
+      
+      // Calculate new timeline in days
+      const baseTimelineDays = userDetails.goalTimelineMonths * 30; // approximate
+      const adjustedTimelineDays = baseTimelineDays * timelineAdjustmentFactor;
+      
+      // Calculate the adjusted goal date
+      const today = new Date();
+      const adjustedGoalDate = addDays(today, adjustedTimelineDays);
+      setGoalDate(adjustedGoalDate);
+      
+      console.log('Goal date adjustment:', {
+        percentageChange,
+        timelineAdjustmentFactor,
+        baseTimelineDays,
+        adjustedTimelineDays,
+        baseGoalDate,
+        adjustedGoalDate
+      });
     }
   };
   

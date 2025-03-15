@@ -101,7 +101,7 @@ const OnboardingWizard = () => {
           </div>
           
           {/* Conditional rendering of components based on step */}
-          {currentStep <= 3 ? (
+          {currentStep < 4 ? (
             <CurrentStepComponent 
               userDetails={userDetails}
               updateUserDetails={updateUserDetails}

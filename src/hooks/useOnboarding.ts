@@ -47,7 +47,7 @@ export const useOnboarding = create<OnboardingState>()(
     {
       name: 'onboarding-storage',
       // Update version number to bust existing storage
-      version: 6,
+      version: 7,
     }
   )
 );
