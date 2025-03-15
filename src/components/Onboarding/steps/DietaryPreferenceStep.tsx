@@ -17,11 +17,19 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         <h2 className="text-2xl font-bold">Your Dietary Preference</h2>
         <p className="text-muted-foreground mt-1">
           This helps us tailor your protein recommendations to your eating style
         </p>
+      </div>
+      
+      <div className="p-4 bg-muted/50 rounded-lg text-sm mb-6">
+        <ul className="space-y-1 text-muted-foreground">
+          <li>• We'll adjust meal suggestions to match your preference</li>
+          <li>• You'll still reach your protein goals with delicious options</li>
+          <li>• You can change this preference later in settings</li>
+        </ul>
       </div>
       
       <RadioGroup
@@ -37,7 +45,7 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
             <Beef className="h-5 w-5 text-orange-500" />
           </div>
           <div className="flex-1 space-y-1">
-            <Label htmlFor="classic" className="font-medium cursor-pointer">Classic</Label>
+            <Label htmlFor="classic" className="font-medium cursor-pointer">Classic <span className="text-sm font-normal text-muted-foreground">(78% choose this)</span></Label>
             <p className="text-sm text-muted-foreground">Includes all animal proteins and plant-based options</p>
           </div>
         </div>
@@ -75,15 +83,6 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
           </div>
         </div>
       </RadioGroup>
-      
-      <div className="mt-4 p-4 bg-muted/50 rounded-lg text-sm">
-        <p className="font-medium mb-1">Your choice affects protein recommendations:</p>
-        <ul className="space-y-1 text-muted-foreground">
-          <li>• We'll adjust meal suggestions to match your preference</li>
-          <li>• You'll still reach your protein goals with delicious options</li>
-          <li>• You can change this preference later in settings</li>
-        </ul>
-      </div>
     </div>
   );
 };
