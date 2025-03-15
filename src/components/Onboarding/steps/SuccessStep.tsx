@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Heart, Pencil } from 'lucide-react';
+import { Check, Pencil } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { format, addMonths } from 'date-fns';
 
@@ -99,9 +99,6 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const carbs = Math.round(calories * 0.4 / 4); // 40% of calories from carbs, 4 calories per gram
   const fats = Math.round(calories * 0.3 / 9); // 30% of calories from fats, 9 calories per gram
   
-  // Health score calculation (simplified)
-  const healthScore = Math.min(10, Math.max(1, Math.round((proteinTarget / (currentWeight * 2)) * 10)));
-  
   return (
     <div className="text-center space-y-4">
       <div className="flex justify-center">
@@ -173,14 +170,6 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
               />
             </CardContent>
           </Card>
-        </div>
-        
-        <div className="flex items-center justify-between bg-white p-2 mt-2 rounded-lg">
-          <div className="flex items-center gap-1.5">
-            <Heart className="h-4 w-4 text-primary fill-primary" />
-            <span className="text-sm font-medium">Health Score</span>
-          </div>
-          <span className="text-sm font-bold">{healthScore}/10</span>
         </div>
       </div>
     </div>

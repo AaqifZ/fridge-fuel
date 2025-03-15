@@ -123,7 +123,7 @@ const OnboardingWizard = () => {
                 onClick={handleComplete}
                 className="w-full py-3 text-lg rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                Let's get started!
+                Start Cooking
               </Button>
             )}
           </div>
