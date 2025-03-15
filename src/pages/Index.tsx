@@ -49,11 +49,6 @@ const Index: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Bottom indicator line */}
-      <div className="pb-8 flex justify-center">
-        <div className="w-16 h-1 bg-black/20 rounded-full"></div>
-      </div>
     </div>
   );
 };
