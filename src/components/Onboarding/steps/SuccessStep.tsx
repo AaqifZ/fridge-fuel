@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Check, Pencil } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -107,8 +106,10 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
       return "Crush your goals with 3 shakes, 2 chicken breasts, Greek yogurt, and a protein bar!";
     } else if (proteinTarget >= 120) {
       return "Power through with 2 shakes, a chicken breast, yogurt, and a protein bar!";
-    } else {
+    } else if (proteinTarget >= 100) {
       return "Fuel up with a shake, a chicken breast, and some cottage cheese!";
+    } else {
+      return "Kickstart with a protein shake and a chicken breast to build your foundation!";
     }
   };
   

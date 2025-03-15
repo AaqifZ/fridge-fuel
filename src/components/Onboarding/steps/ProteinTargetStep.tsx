@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Beef, Calendar, FlaskConical } from 'lucide-react';
@@ -59,7 +60,6 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     const proteinBar = 20;   // 20g per bar
     
     let plan = [];
-    let remainingProtein = proteinGrams;
     
     if (proteinGrams > 160) {
       plan.push(`Fuel up with 3 protein shakes (${3 * proteinShake}g), 2 juicy chicken breasts (${2 * chickenBreast}g), a creamy cup of Greek yogurt (${greekYogurt}g), and a convenient protein bar (${proteinBar}g)!`);
@@ -67,8 +67,12 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     else if (proteinGrams >= 120) {
       plan.push(`Power through with 2 protein shakes, a tender chicken breast, a cup of Greek yogurt, and a tasty protein bar!`);
     } 
-    else {
+    else if (proteinGrams >= 100) {
       plan.push(`Knock out your goals with a protein shake, a lean chicken breast, and a hearty cup of cottage cheese!`);
+    }
+    else {
+      // For protein under 100g (though our app sets minimum to 100g)
+      plan.push(`Start strong with a protein shake and a chicken breast to hit your essential protein needs!`);
     }
     
     return plan.join(' ');
@@ -114,6 +118,7 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       let proteinTotal = baseProtein + growthFactor + activityAdjustment;
       proteinTotal = Math.round(proteinTotal / 5) * 5;
       
+      // Set minimum to 100g for protein
       proteinTotal = Math.max(100, Math.min(250, proteinTotal));
       
       setCalculatedProtein(proteinTotal);
