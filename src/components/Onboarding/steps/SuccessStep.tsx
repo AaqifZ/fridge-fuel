@@ -173,6 +173,10 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
             </CardContent>
           </Card>
         </div>
+        
+        <p className="text-xs text-muted-foreground mt-3 italic">
+          Calculated based on your goals and activity level
+        </p>
       </div>
     </div>
   );

@@ -75,20 +75,25 @@ const OnboardingWizard = () => {
     }
   };
   
+  // Calculate which step indicators should be filled
+  // Note: We show steps 1-4 (not including welcome step)
+  const totalStepsShown = steps.length - 1; // Exclude welcome step
+  const currentVisibleStep = currentStep === 0 ? 1 : currentStep;
+  
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-secondary/10">
       <div className="glass-card w-full max-w-lg p-6 rounded-2xl shadow-xl border border-primary/10 animate-fade-in">
         <div className="mb-4">
           <div className="flex justify-between items-center mb-6">
             <div className="text-sm text-muted-foreground">
-              Step {currentStep} of {steps.length - 1}
+              Step {currentStep === 0 ? 1 : currentStep} of {totalStepsShown}
             </div>
             
             <div className="flex space-x-1">
-              {steps.slice(1).map((_, index) => (
+              {Array.from({ length: totalStepsShown }, (_, index) => (
                 <div 
                   key={index}
-                  className={`h-1.5 w-8 rounded-full ${index < currentStep - 1 ? 'bg-primary' : 'bg-muted'}`}
+                  className={`h-1.5 w-8 rounded-full ${index < currentVisibleStep ? 'bg-primary' : 'bg-muted'}`}
                 />
               ))}
             </div>
