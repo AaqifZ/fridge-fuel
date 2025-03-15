@@ -19,6 +19,11 @@ const WorkoutFrequencyStep: React.FC<WorkoutFrequencyStepProps> = ({
   updateUserDetails,
   onBack 
 }) => {
+  // Create a function to handle selection
+  const handleSelection = (value: string) => {
+    updateUserDetails({ workoutFrequency: value });
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -35,7 +40,10 @@ const WorkoutFrequencyStep: React.FC<WorkoutFrequencyStepProps> = ({
         onValueChange={(value) => updateUserDetails({ workoutFrequency: value })}
         className="flex flex-col gap-4"
       >
-        <div className="flex items-center space-x-3 rounded-xl p-5 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+        <div 
+          className={`flex items-center space-x-3 rounded-xl p-5 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer ${userDetails.workoutFrequency === '0-2' ? 'border-2 border-primary' : ''}`}
+          onClick={() => handleSelection('0-2')}
+        >
           <RadioGroupItem value="0-2" id="frequency-0-2" className="mr-1" />
           <Circle className="h-6 w-6 mr-3" />
           <div>
@@ -44,7 +52,10 @@ const WorkoutFrequencyStep: React.FC<WorkoutFrequencyStepProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center space-x-3 rounded-xl p-5 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+        <div 
+          className={`flex items-center space-x-3 rounded-xl p-5 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer ${userDetails.workoutFrequency === '3-5' ? 'border-2 border-primary' : ''}`}
+          onClick={() => handleSelection('3-5')}
+        >
           <RadioGroupItem value="3-5" id="frequency-3-5" className="mr-1" />
           <div className="mr-3 flex flex-wrap w-6 h-6 justify-center items-center">
             <CircleDot className="h-2 w-2" />
@@ -57,7 +68,10 @@ const WorkoutFrequencyStep: React.FC<WorkoutFrequencyStepProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center space-x-3 rounded-xl p-5 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer">
+        <div 
+          className={`flex items-center space-x-3 rounded-xl p-5 bg-secondary/20 hover:bg-secondary/30 transition-colors cursor-pointer ${userDetails.workoutFrequency === '6+' ? 'border-2 border-primary' : ''}`}
+          onClick={() => handleSelection('6+')}
+        >
           <RadioGroupItem value="6+" id="frequency-6+" className="mr-1" />
           <MoreHorizontal className="h-6 w-6 mr-3" />
           <div>
