@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import WelcomeStep from './steps/WelcomeStep';
-import GoalSetupStep from './steps/GoalSetupStep';
+import WeightSetupStep from './steps/WeightSetupStep';
+import ProteinTargetStep from './steps/ProteinTargetStep';
 import WorkoutFrequencyStep from './steps/WorkoutFrequencyStep';
 import BasicInfoStep from './steps/BasicInfoStep';
 import GoalSelectionStep from './steps/GoalSelectionStep';
@@ -24,7 +26,7 @@ const OnboardingWizard = () => {
   const { setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
   
-  // Set to goal setup step (index 1) when component mounts, skipping welcome step
+  // Set to weight setup step (index 1) when component mounts, skipping welcome step
   useEffect(() => {
     setCurrentStep(1);
   }, [setCurrentStep]);
@@ -37,7 +39,8 @@ const OnboardingWizard = () => {
   // Keep the welcome step in the array but start from goal setup step
   const steps = [
     { id: 'welcome', component: WelcomeStep },
-    { id: 'goal-setup', component: GoalSetupStep },
+    { id: 'weight-setup', component: WeightSetupStep },
+    { id: 'protein-target', component: ProteinTargetStep },
     { id: 'workout-frequency', component: WorkoutFrequencyStep },
     { id: 'basic-info', component: BasicInfoStep },
     { id: 'goal', component: GoalSelectionStep },
@@ -47,14 +50,14 @@ const OnboardingWizard = () => {
   const CurrentStepComponent = steps[currentStep].component;
   
   const handleNext = () => {
-    // For the goal setup step, we need to validate selection before proceeding
+    // For the weight setup step, we need to validate selection before proceeding
     if (currentStep === 1 && (!userDetails.currentWeight || !userDetails.targetWeight)) {
       toast.error("Please enter your current and target weights to continue");
       return;
     }
     
     // For the workout frequency step, validate selection before proceeding
-    if (currentStep === 2 && !userDetails.workoutFrequency) {
+    if (currentStep === 3 && !userDetails.workoutFrequency) {
       toast.error("Please select your workout frequency to continue");
       return;
     }
@@ -122,7 +125,7 @@ const OnboardingWizard = () => {
             {currentStep < steps.length - 1 ? (
               <Button 
                 onClick={handleNext} 
-                className={currentStep === 1 || currentStep === 2 ? "w-full py-3 text-lg rounded-full" : ""}
+                className={currentStep === 1 || currentStep === 2 || currentStep === 3 ? "w-full py-3 text-lg rounded-full" : ""}
               >
                 Continue
               </Button>
