@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
+import { Camera } from 'lucide-react';
 import WelcomeStep from './steps/WelcomeStep';
 import WeightSetupStep from './steps/WeightSetupStep';
 import TimelineActivityStep from './steps/TimelineActivityStep';
@@ -126,9 +127,10 @@ const OnboardingWizard = () => {
             ) : (
               <Button 
                 onClick={handleComplete}
-                className="w-full py-3 text-lg rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+                className="w-full py-3 text-lg rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center gap-2"
               >
-                Start Cooking
+                <Camera className="w-5 h-5" />
+                Take Photo Now
               </Button>
             )}
           </div>
