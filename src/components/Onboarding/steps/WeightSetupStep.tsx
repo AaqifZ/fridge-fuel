@@ -85,12 +85,27 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
     return ((weight - minWeight) / (maxWeight - minWeight)) * 100;
   };
   
-  // Handle weight changes from slider or direct input
-  const handleWeightChange = (type: 'current' | 'target', value: number) => {
+  // Handle weight changes from slider
+  const handleSliderChange = (type: 'current' | 'target', values: number[]) => {
+    if (type === 'current') {
+      updateUserDetails({ currentWeight: values[0] });
+      // Update target weight when current weight changes (if manually set)
+      if (userDetails.targetWeight && userDetails.targetWeight <= values[0]) {
+        updateUserDetails({ targetWeight: values[0] + 7 });
+      }
+    } else {
+      updateUserDetails({ targetWeight: values[0] });
+    }
+  };
+  
+  // Handle weight changes from direct input
+  const handleInputChange = (type: 'current' | 'target', value: number) => {
     if (type === 'current') {
       updateUserDetails({ currentWeight: value });
       // Update target weight when current weight changes (if not manually set)
-      updateUserDetails({ targetWeight: value + 7 });
+      if (userDetails.targetWeight && userDetails.targetWeight <= value) {
+        updateUserDetails({ targetWeight: value + 7 });
+      }
     } else {
       updateUserDetails({ targetWeight: value });
     }
@@ -133,7 +148,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
                 id="current-weight"
                 type="number"
                 value={userDetails.currentWeight || ''}
-                onChange={(e) => handleWeightChange('current', parseFloat(e.target.value) || 0)}
+                onChange={(e) => handleInputChange('current', parseFloat(e.target.value) || 0)}
                 className="w-20 text-center p-1 h-10 text-lg font-medium"
               />
               <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
@@ -149,7 +164,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
               min={minWeight}
               max={maxWeight}
               step={1}
-              onValueChange={(values) => handleWeightChange('current', values[0])}
+              onValueChange={(values) => handleSliderChange('current', values)}
               className="z-10"
             />
             
@@ -184,7 +199,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
                 id="target-weight"
                 type="number"
                 value={userDetails.targetWeight || ''}
-                onChange={(e) => handleWeightChange('target', parseFloat(e.target.value) || 0)}
+                onChange={(e) => handleInputChange('target', parseFloat(e.target.value) || 0)}
                 className="w-20 text-center p-1 h-10 text-lg font-medium"
               />
               <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
@@ -200,7 +215,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
               min={minWeight}
               max={maxWeight}
               step={1}
-              onValueChange={(values) => handleWeightChange('target', values[0])}
+              onValueChange={(values) => handleSliderChange('target', values)}
               className="z-10"
             />
             
