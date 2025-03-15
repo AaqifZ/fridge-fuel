@@ -14,38 +14,21 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import OnboardingWizard from "./components/Onboarding/OnboardingWizard";
 
+// Create a new QueryClient instance outside of the component to prevent recreation on renders
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Add smooth page transitions
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    
-    const elements = document.querySelectorAll('main, section, article');
-    elements.forEach((el) => observer.observe(el));
-    
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
-
+  // Add an ID to the app container for debugging
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner position="top-center" />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
+        <div id="app-container">
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );
@@ -59,8 +42,11 @@ const AppContent = () => {
   // Hide navbar on index page and onboarding
   const showNavbar = location.pathname !== '/' && location.pathname !== '/onboarding';
   
-  // For debugging
-  console.log("App routing - Onboarding completed:", isCompleted);
+  // Debug mounting
+  useEffect(() => {
+    console.log("AppContent mounted, path:", location.pathname);
+    return () => console.log("AppContent unmounted");
+  }, [location.pathname]);
   
   return (
     <>

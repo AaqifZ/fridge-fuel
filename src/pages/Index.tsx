@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Camera } from 'lucide-react';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -9,17 +9,20 @@ const Index: React.FC = () => {
   const navigate = useNavigate();
   const { resetOnboarding } = useOnboarding();
   
+  useEffect(() => {
+    // Log component mounting for debugging
+    console.log("Index component mounted");
+    return () => console.log("Index component unmounted");
+  }, []);
+  
   const handleGetStarted = () => {
     console.log("Directing user to onboarding");
     resetOnboarding();
     navigate('/onboarding');
   };
 
-  // Add console log to track component rendering
-  console.log("Index component rendering");
-
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
+    <div className="min-h-screen bg-white overflow-hidden" id="index-container">
       {/* Language selector */}
       <div className="absolute top-6 right-6 z-10">
         <button className="px-3 py-1 text-sm font-medium text-gray-700 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors">
