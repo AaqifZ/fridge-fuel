@@ -84,8 +84,8 @@ const OnboardingWizard = () => {
   const isGenderStep = currentStep === 1;
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between p-4 bg-gradient-to-b from-background to-secondary/10">
-      <div className="glass-card w-full max-w-lg p-6 pb-4 rounded-2xl shadow-xl border border-primary/10 animate-fade-in flex flex-col" style={{ minHeight: '85vh' }}>
+    <div className="min-h-screen flex flex-col items-center justify-between p-5 bg-white">
+      <div className="w-full max-w-lg p-6 pb-4 rounded-2xl flex flex-col" style={{ minHeight: '85vh' }}>
         <div className="mb-4 flex-1">
           {!isGenderStep && (
             <div className="flex justify-between items-center mb-6">
@@ -123,7 +123,8 @@ const OnboardingWizard = () => {
           {isGenderStep ? (
             <Button 
               onClick={handleNext}
-              className="w-full h-14 rounded-full text-lg font-medium bg-gray-400 hover:bg-gray-500"
+              className="w-full h-14 rounded-full text-lg font-medium"
+              size="lg"
             >
               Continue
             </Button>
@@ -133,6 +134,7 @@ const OnboardingWizard = () => {
                 <Button 
                   variant="outline" 
                   onClick={handleBack}
+                  className="rounded-full"
                 >
                   Back
                 </Button>
@@ -140,11 +142,11 @@ const OnboardingWizard = () => {
               
               <div className={`${currentStep > 1 ? 'ml-auto' : 'w-full'}`}>
                 {currentStep < steps.length - 1 ? (
-                  <Button onClick={handleNext}>
+                  <Button onClick={handleNext} className="rounded-full">
                     Continue
                   </Button>
                 ) : (
-                  <Button onClick={handleComplete}>
+                  <Button onClick={handleComplete} className="rounded-full" size="lg">
                     Start Analyzing Your Fridge
                   </Button>
                 )}
