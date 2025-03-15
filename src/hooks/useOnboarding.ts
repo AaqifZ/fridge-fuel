@@ -11,12 +11,13 @@ interface OnboardingState {
     age?: number;
     gender?: 'male' | 'female' | 'other';
     workoutFrequency?: string;
-    activityLevel?: string;
+    activityLevel?: 'sedentary' | 'moderate' | 'active';
     goal?: string;
     currentWeight?: number;
     targetWeight?: number;
     proteinTarget?: number;
     weightUnit?: 'kg' | 'lbs';
+    goalTimelineMonths?: number;
   };
   setIsCompleted: (value: boolean) => void;
   setCurrentStep: (step: number) => void;
@@ -46,7 +47,7 @@ export const useOnboarding = create<OnboardingState>()(
     {
       name: 'onboarding-storage',
       // Add a version to bust any existing storage
-      version: 4,
+      version: 5,
     }
   )
 );

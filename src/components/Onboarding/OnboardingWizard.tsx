@@ -6,6 +6,7 @@ import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import WelcomeStep from './steps/WelcomeStep';
 import WeightSetupStep from './steps/WeightSetupStep';
+import TimelineActivityStep from './steps/TimelineActivityStep';
 import ProteinTargetStep from './steps/ProteinTargetStep';
 import WorkoutFrequencyStep from './steps/WorkoutFrequencyStep';
 import BasicInfoStep from './steps/BasicInfoStep';
@@ -40,6 +41,7 @@ const OnboardingWizard = () => {
   const steps = [
     { id: 'welcome', component: WelcomeStep },
     { id: 'weight-setup', component: WeightSetupStep },
+    { id: 'timeline-activity', component: TimelineActivityStep },
     { id: 'protein-target', component: ProteinTargetStep },
     { id: 'workout-frequency', component: WorkoutFrequencyStep },
     { id: 'basic-info', component: BasicInfoStep },
@@ -56,8 +58,14 @@ const OnboardingWizard = () => {
       return;
     }
     
+    // For the timeline activity step, validate selection before proceeding
+    if (currentStep === 2 && (!userDetails.goalTimelineMonths || !userDetails.activityLevel)) {
+      toast.error("Please complete both sections before continuing");
+      return;
+    }
+    
     // For the workout frequency step, validate selection before proceeding
-    if (currentStep === 3 && !userDetails.workoutFrequency) {
+    if (currentStep === 4 && !userDetails.workoutFrequency) {
       toast.error("Please select your workout frequency to continue");
       return;
     }
@@ -125,7 +133,7 @@ const OnboardingWizard = () => {
             {currentStep < steps.length - 1 ? (
               <Button 
                 onClick={handleNext} 
-                className={currentStep === 1 || currentStep === 2 || currentStep === 3 ? "w-full py-3 text-lg rounded-full" : ""}
+                className={currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === 4 ? "w-full py-3 text-lg rounded-full" : ""}
               >
                 Continue
               </Button>
