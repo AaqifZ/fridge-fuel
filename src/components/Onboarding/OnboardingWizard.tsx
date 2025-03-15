@@ -59,7 +59,9 @@ const OnboardingWizard = () => {
       return;
     }
     
-    if (currentStep === 3 && !userDetails.dietaryPreference) {
+    // Modified validation for dietary preference step
+    // Only check if dietaryPreference exists, gluten/dairy settings can be undefined
+    if (currentStep === 3 && userDetails.dietaryPreference === undefined) {
       toast.error("Please select your dietary preference to continue");
       return;
     }

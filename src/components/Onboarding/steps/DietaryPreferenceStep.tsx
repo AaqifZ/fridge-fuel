@@ -79,7 +79,7 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
       
       {/* Additional dietary restrictions */}
       <div className="mt-6 border-t pt-5">
-        <h3 className="font-medium mb-3">Additional dietary restrictions</h3>
+        <h3 className="font-medium mb-3">Optional dietary restrictions</h3>
         
         <div className="space-y-4">
           <div className="flex items-center justify-between bg-muted/30 p-3 rounded-lg">
