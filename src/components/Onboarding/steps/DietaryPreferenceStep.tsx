@@ -25,14 +25,6 @@ const DietaryPreferenceStep: React.FC<DietaryPreferenceStepProps> = ({
         <h2 className="text-2xl font-bold">Your Dietary Preference</h2>
       </div>
       
-      <div className="p-4 bg-muted/50 rounded-lg text-sm mb-6">
-        <ul className="space-y-1 text-muted-foreground">
-          <li>• We'll adjust meal suggestions to match your preference</li>
-          <li>• You'll still reach your protein goals with delicious options</li>
-          <li>• You can change this preference later in settings</li>
-        </ul>
-      </div>
-      
       <RadioGroup
         className="space-y-3"
         value={userDetails.dietaryPreference || 'classic'}
