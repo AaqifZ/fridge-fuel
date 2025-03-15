@@ -1,14 +1,44 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { X, HelpCircle, Camera, Zap, Image, Scan } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { cameraService } from '@/services/CameraService';
+import { toast } from 'sonner';
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
   
   const handleGetStarted = () => {
     navigate('/onboarding');
+  };
+
+  const handleTakePhoto = async () => {
+    try {
+      const photo = await cameraService.takePicture();
+      if (photo.base64String) {
+        setCapturedImage(`data:image/${photo.format};base64,${photo.base64String}`);
+        toast.success('Photo captured successfully!');
+      }
+    } catch (error) {
+      // In web environments without camera access, provide fallback
+      console.error('Camera error:', error);
+      toast.error('Camera access not available. Please ensure you're using the mobile app or have granted camera permissions.');
+    }
+  };
+
+  const handleSelectFromGallery = async () => {
+    try {
+      const photo = await cameraService.getGalleryPhoto();
+      if (photo.base64String) {
+        setCapturedImage(`data:image/${photo.format};base64,${photo.base64String}`);
+        toast.success('Photo selected successfully!');
+      }
+    } catch (error) {
+      console.error('Gallery error:', error);
+      toast.error('Could not access photo gallery. Please ensure you have granted permissions.');
+    }
   };
 
   return (
@@ -17,9 +47,21 @@ const Index: React.FC = () => {
       <div className="relative flex-1 flex flex-col items-center justify-center">
         {/* Camera viewfinder area */}
         <div className="relative w-full max-w-sm aspect-[9/16] bg-black rounded-3xl overflow-hidden mb-8">
+          {/* Display captured image if available */}
+          {capturedImage && (
+            <img 
+              src={capturedImage} 
+              alt="Captured food" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+          
           {/* Top action buttons */}
           <div className="absolute top-4 left-0 right-0 flex justify-between px-4 z-10">
-            <button className="w-10 h-10 flex items-center justify-center bg-gray-800/70 rounded-full">
+            <button 
+              className="w-10 h-10 flex items-center justify-center bg-gray-800/70 rounded-full"
+              onClick={() => setCapturedImage(null)}
+            >
               <X className="w-5 h-5 text-white" />
             </button>
             <button className="w-10 h-10 flex items-center justify-center bg-gray-800/70 rounded-full">
@@ -50,7 +92,7 @@ const Index: React.FC = () => {
                 <span className="text-sm font-medium text-black">Scan Food</span>
               </div>
               <div className="flex items-center space-x-4">
-                <button className="text-gray-600">
+                <button className="text-gray-600" onClick={handleSelectFromGallery}>
                   <Image className="w-5 h-5" />
                 </button>
                 <button className="text-gray-600">
@@ -63,7 +105,12 @@ const Index: React.FC = () => {
           {/* Camera button */}
           <div className="absolute -bottom-16 left-0 right-0 flex justify-center">
             <div className="relative">
-              <button className="w-16 h-16 rounded-full bg-white border-4 border-gray-200"></button>
+              <button 
+                className="w-16 h-16 rounded-full bg-white border-4 border-gray-200"
+                onClick={handleTakePhoto}
+              >
+                <Camera className="w-8 h-8 mx-auto text-black" />
+              </button>
               <button className="absolute -left-12 bottom-4 w-10 h-10 flex items-center justify-center bg-gray-800/90 rounded-full">
                 <Zap className="w-5 h-5 text-white" />
               </button>
