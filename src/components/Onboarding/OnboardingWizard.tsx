@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -7,6 +8,7 @@ import { Camera } from 'lucide-react';
 import WelcomeStep from './steps/WelcomeStep';
 import WeightSetupStep from './steps/WeightSetupStep';
 import TimelineActivityStep from './steps/TimelineActivityStep';
+import DietaryPreferenceStep from './steps/DietaryPreferenceStep';
 import ProteinTargetStep from './steps/ProteinTargetStep';
 import SuccessStep from './steps/SuccessStep';
 import { toast } from 'sonner';
@@ -36,6 +38,7 @@ const OnboardingWizard = () => {
     { id: 'welcome', component: WelcomeStep },
     { id: 'weight-setup', component: WeightSetupStep },
     { id: 'timeline-activity', component: TimelineActivityStep },
+    { id: 'dietary-preference', component: DietaryPreferenceStep },
     { id: 'protein-target', component: ProteinTargetStep },
     { id: 'success', component: SuccessStep },
   ];
@@ -50,6 +53,11 @@ const OnboardingWizard = () => {
     
     if (currentStep === 2 && (!userDetails.goalTimelineMonths || !userDetails.activityLevel)) {
       toast.error("Please complete both sections before continuing");
+      return;
+    }
+    
+    if (currentStep === 3 && !userDetails.dietaryPreference) {
+      toast.error("Please select your dietary preference to continue");
       return;
     }
     
@@ -117,7 +125,7 @@ const OnboardingWizard = () => {
             {currentStep < steps.length - 1 ? (
               <Button 
                 onClick={handleNext} 
-                className={currentStep === 1 || currentStep === 2 ? "w-full py-3 text-lg rounded-full" : ""}
+                className={currentStep >= 1 && currentStep <= 3 ? "w-full py-3 text-lg rounded-full" : ""}
               >
                 Continue
               </Button>

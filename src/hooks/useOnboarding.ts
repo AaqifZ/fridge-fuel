@@ -18,7 +18,8 @@ interface OnboardingState {
     proteinTarget?: number;
     weightUnit?: 'kg' | 'lbs';
     goalTimelineMonths?: number;
-    goalDate?: string; // Add the goal date field
+    goalDate?: string;
+    dietaryPreference?: 'classic' | 'pescatarian' | 'vegetarian' | 'vegan';
   };
   setIsCompleted: (value: boolean) => void;
   setCurrentStep: (step: number) => void;
@@ -48,7 +49,7 @@ export const useOnboarding = create<OnboardingState>()(
     {
       name: 'onboarding-storage',
       // Update version number to force refresh of existing storage
-      version: 15,
+      version: 16,
     }
   )
 );
