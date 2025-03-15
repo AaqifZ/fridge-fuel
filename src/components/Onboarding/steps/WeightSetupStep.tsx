@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
 
 interface WeightSetupStepProps {
   userDetails: {
@@ -64,7 +65,7 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
     }
   };
   
-  // Handle input changes
+  // Handle weight changes from slider or direct input
   const handleWeightChange = (type: 'current' | 'target', value: number) => {
     if (type === 'current') {
       updateUserDetails({ currentWeight: value });
@@ -96,34 +97,66 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
         </span>
       </div>
       
-      <div className="space-y-6">
-        {/* Current Weight */}
-        <div className="space-y-2">
-          <Label htmlFor="current-weight" className="text-base">Current Weight</Label>
-          <div className="flex items-center gap-4">
-            <Input
-              id="current-weight"
-              type="number"
-              value={userDetails.currentWeight || ''}
-              onChange={(e) => handleWeightChange('current', parseFloat(e.target.value) || 0)}
-              className="text-lg"
-            />
-            <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
+      <div className="space-y-8">
+        {/* Current Weight with Slider */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <Label htmlFor="current-weight" className="text-base">Current Weight</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                id="current-weight"
+                type="number"
+                value={userDetails.currentWeight || ''}
+                onChange={(e) => handleWeightChange('current', parseFloat(e.target.value) || 0)}
+                className="w-16 text-center p-1 h-8"
+              />
+              <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
+            </div>
+          </div>
+          
+          <Slider
+            value={[userDetails.currentWeight || 0]}
+            min={useKg ? 40 : 88}
+            max={useKg ? 150 : 330}
+            step={1}
+            onValueChange={(values) => handleWeightChange('current', values[0])}
+            className="py-4"
+          />
+          
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{useKg ? '40 kg' : '88 lbs'}</span>
+            <span>{useKg ? '150 kg' : '330 lbs'}</span>
           </div>
         </div>
         
-        {/* Target Weight */}
-        <div className="space-y-2">
-          <Label htmlFor="target-weight" className="text-base">Target Weight</Label>
-          <div className="flex items-center gap-4">
-            <Input
-              id="target-weight"
-              type="number"
-              value={userDetails.targetWeight || ''}
-              onChange={(e) => handleWeightChange('target', parseFloat(e.target.value) || 0)}
-              className="text-lg"
-            />
-            <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
+        {/* Target Weight with Slider */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <Label htmlFor="target-weight" className="text-base">Target Weight</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                id="target-weight"
+                type="number"
+                value={userDetails.targetWeight || ''}
+                onChange={(e) => handleWeightChange('target', parseFloat(e.target.value) || 0)}
+                className="w-16 text-center p-1 h-8"
+              />
+              <span className="text-sm font-medium">{useKg ? 'kg' : 'lbs'}</span>
+            </div>
+          </div>
+          
+          <Slider
+            value={[userDetails.targetWeight || 0]}
+            min={useKg ? 40 : 88}
+            max={useKg ? 150 : 330}
+            step={1}
+            onValueChange={(values) => handleWeightChange('target', values[0])}
+            className="py-4"
+          />
+          
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{useKg ? '40 kg' : '88 lbs'}</span>
+            <span>{useKg ? '150 kg' : '330 lbs'}</span>
           </div>
         </div>
       </div>
