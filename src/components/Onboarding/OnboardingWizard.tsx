@@ -65,12 +65,9 @@ const OnboardingWizard = () => {
       return;
     }
     
-    // Fix dietary preference validation
-    // Explicitly check if dietaryPreference is null, undefined, or empty string
-    if (currentStep === 3 && 
-        (userDetails.dietaryPreference === undefined || 
-         userDetails.dietaryPreference === null || 
-         userDetails.dietaryPreference === '')) {
+    // Fix dietary preference validation by checking for undefined instead of empty string
+    // Also consider 'classic' as a valid value that's preselected
+    if (currentStep === 3 && userDetails.dietaryPreference === undefined) {
       toast.error("Please select your dietary preference to continue");
       return;
     }

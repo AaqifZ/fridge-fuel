@@ -29,7 +29,7 @@ interface OnboardingState {
   resetOnboarding: () => void;
 }
 
-const initialState = {
+const initialState: Omit<OnboardingState, 'setIsCompleted' | 'setCurrentStep' | 'updateUserDetails' | 'resetOnboarding'> = {
   isCompleted: false,
   currentStep: 0,
   userDetails: {
@@ -57,7 +57,7 @@ export const useOnboarding = create<OnboardingState>()(
     {
       name: 'onboarding-storage',
       // Update version number to force refresh of existing storage
-      version: 18, // Increment version to clear potentially corrupted state
+      version: 19, // Increment version to clear potentially corrupted state
     }
   )
 );
