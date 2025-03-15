@@ -5,6 +5,7 @@ import { useOnboarding } from '@/hooks/useOnboarding';
 import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 import { Button } from '@/components/ui/button';
 import { Camera } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import WelcomeStep from './steps/WelcomeStep';
 import WeightSetupStep from './steps/WeightSetupStep';
 import TimelineActivityStep from './steps/TimelineActivityStep';
@@ -25,6 +26,7 @@ const OnboardingWizard = () => {
   
   const { setProteinTarget } = useProteinCalculator();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     setCurrentStep(1);
@@ -105,10 +107,13 @@ const OnboardingWizard = () => {
             </div>
           </div>
           
-          <CurrentStepComponent 
-            userDetails={userDetails}
-            updateUserDetails={updateUserDetails}
-          />
+          {/* Fixed height container for consistent sizing across steps */}
+          <div className={`${isMobile ? 'h-[450px]' : 'h-[500px]'} overflow-auto pb-2`}>
+            <CurrentStepComponent 
+              userDetails={userDetails}
+              updateUserDetails={updateUserDetails}
+            />
+          </div>
         </div>
         
         <div className="flex justify-between mt-8">
