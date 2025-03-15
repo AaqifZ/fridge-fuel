@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
+import { Dumbbell } from 'lucide-react';
 
 interface WeightSetupStepProps {
   userDetails: {
@@ -73,6 +74,10 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
     }
   };
   
+  // Define slider min/max values based on units
+  const minWeight = useKg ? 55 : 121;  // 55kg or 121lbs
+  const maxWeight = useKg ? 130 : 286; // 130kg or 286lbs (130kg converted to lbs)
+  
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
@@ -113,18 +118,23 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
             </div>
           </div>
           
-          <Slider
-            value={[userDetails.currentWeight || 0]}
-            min={useKg ? 40 : 88}
-            max={useKg ? 150 : 330}
-            step={1}
-            onValueChange={(values) => handleWeightChange('current', values[0])}
-            className="py-4"
-          />
+          <div className="relative">
+            <Slider
+              value={[userDetails.currentWeight || 0]}
+              min={minWeight}
+              max={maxWeight}
+              step={1}
+              onValueChange={(values) => handleWeightChange('current', values[0])}
+              className="py-4"
+            />
+            <div className="absolute top-1/2 left-[var(--slider-thumb-position,0%)] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+              <Dumbbell className="h-5 w-5 text-primary" />
+            </div>
+          </div>
           
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{useKg ? '40 kg' : '88 lbs'}</span>
-            <span>{useKg ? '150 kg' : '330 lbs'}</span>
+            <span>{useKg ? '55 kg' : '121 lbs'}</span>
+            <span>{useKg ? '130 kg' : '286 lbs'}</span>
           </div>
         </div>
         
@@ -144,18 +154,23 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
             </div>
           </div>
           
-          <Slider
-            value={[userDetails.targetWeight || 0]}
-            min={useKg ? 40 : 88}
-            max={useKg ? 150 : 330}
-            step={1}
-            onValueChange={(values) => handleWeightChange('target', values[0])}
-            className="py-4"
-          />
+          <div className="relative">
+            <Slider
+              value={[userDetails.targetWeight || 0]}
+              min={minWeight}
+              max={maxWeight}
+              step={1}
+              onValueChange={(values) => handleWeightChange('target', values[0])}
+              className="py-4"
+            />
+            <div className="absolute top-1/2 left-[var(--slider-thumb-position,0%)] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+              <Dumbbell className="h-5 w-5 text-primary" />
+            </div>
+          </div>
           
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{useKg ? '40 kg' : '88 lbs'}</span>
-            <span>{useKg ? '150 kg' : '330 lbs'}</span>
+            <span>{useKg ? '55 kg' : '121 lbs'}</span>
+            <span>{useKg ? '130 kg' : '286 lbs'}</span>
           </div>
         </div>
       </div>
