@@ -16,23 +16,21 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      {/* Language selector in top right */}
+    <div className="relative min-h-screen bg-white">
+      {/* Language selector */}
       <div className="absolute top-6 right-6">
         <button className="px-3 py-1 text-sm font-medium text-gray-700 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors">
           EN
         </button>
       </div>
       
-      {/* Single content container */}
-      <div className="flex-1 flex flex-col items-center justify-center px-5 py-10">
-        {/* App logo/brand */}
-        <div className="mb-8">
-          <div className="font-bold text-4xl text-[#1EAEDB]">BulkAI</div>
-        </div>
+      {/* Main content */}
+      <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10">
+        {/* App logo */}
+        <h2 className="font-bold text-4xl text-[#1EAEDB] mb-8">BulkAI</h2>
         
-        {/* Hero image with camera icon overlay */}
-        <div className="w-full max-w-md mb-12 relative">
+        {/* Hero image */}
+        <div className="w-full max-w-md mb-10 relative">
           <img 
             src="/lovable-uploads/547e4c49-0421-4f0b-9cb2-bb0838d06b9a.png" 
             alt="Open refrigerator filled with food items" 
@@ -45,18 +43,17 @@ const Index: React.FC = () => {
           </div>
         </div>
         
-        {/* Heading */}
-        <h1 className="text-4xl font-bold text-center tracking-tight text-gray-900 mb-6">
+        {/* Heading and subheading */}
+        <h1 className="text-4xl font-bold text-center tracking-tight text-gray-900 mb-4">
           Scan. Cook. Gain.
         </h1>
         
-        {/* Subheading */}
-        <p className="text-xl text-center mb-10 max-w-md text-gray-600">
+        <p className="text-xl text-center mb-8 max-w-md text-gray-600">
           Snap a photo of your fridge and get tailored high-protein recipes in seconds
         </p>
         
         {/* CTA Button */}
-        <div className="w-full max-w-md space-y-4 px-4">
+        <div className="w-full max-w-md px-4">
           <Button 
             className="w-full h-14 text-lg bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-white rounded-full shadow-md"
             onClick={handleGetStarted}
