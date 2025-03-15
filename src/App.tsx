@@ -59,6 +59,9 @@ const AppContent = () => {
   // Hide navbar on index page and onboarding
   const showNavbar = location.pathname !== '/' && location.pathname !== '/onboarding';
   
+  // For debugging
+  console.log("App routing - Onboarding completed:", isCompleted);
+  
   return (
     <>
       {showNavbar && <Navbar />}

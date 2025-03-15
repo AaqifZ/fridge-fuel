@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Camera, ChevronRight } from 'lucide-react';
@@ -10,6 +10,9 @@ const Index: React.FC = () => {
   const { isCompleted } = useOnboarding();
   
   const handleGetStarted = () => {
+    // For debugging
+    console.log("Onboarding completed status:", isCompleted);
+    
     if (isCompleted) {
       navigate('/analyze');
     } else {
