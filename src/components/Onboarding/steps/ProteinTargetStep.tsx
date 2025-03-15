@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
-import { Beef } from 'lucide-react';
+import { Beef, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+import { format, addMonths } from 'date-fns';
 
 interface ProteinTargetStepProps {
   userDetails: {
@@ -20,9 +21,10 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
   const [calculatedProtein, setCalculatedProtein] = useState<number>(0);
   const [proteinAdjustment, setProteinAdjustment] = useState<number>(0);
   const [adjustmentPercentage, setAdjustmentPercentage] = useState<number>(0);
+  const [goalDate, setGoalDate] = useState<Date | null>(null);
   const useKg = userDetails.weightUnit === 'kg';
   
-  // Calculate protein target based on the formula whenever relevant values change
+  // Calculate protein target and goal date based on the formula whenever relevant values change
   useEffect(() => {
     if (userDetails.currentWeight && userDetails.targetWeight && 
         userDetails.goalTimelineMonths && userDetails.activityLevel) {
@@ -82,6 +84,11 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
       // Update the user details with the new protein target
       updateUserDetails({ proteinTarget: proteinTotal });
       
+      // Calculate and set goal date
+      const today = new Date();
+      const achievementDate = addMonths(today, userDetails.goalTimelineMonths);
+      setGoalDate(achievementDate);
+      
       console.log('Protein calculation:', {
         currentWeightKg,
         targetWeightKg,
@@ -91,7 +98,8 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
         baseProtein,
         growthFactor,
         activityAdjustment,
-        proteinTotal
+        proteinTotal,
+        goalDate: achievementDate
       });
     }
   }, [userDetails.currentWeight, userDetails.targetWeight, userDetails.activityLevel, userDetails.goalTimelineMonths, userDetails.weightUnit]);
@@ -131,6 +139,9 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     }
   };
   
+  // Format goal date
+  const formattedGoalDate = goalDate ? format(goalDate, 'MMMM d, yyyy') : '';
+  
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
@@ -152,6 +163,16 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
             <span className="text-sm font-normal ml-1">g</span>
           </div>
         </div>
+        
+        {/* Goal Achievement Date */}
+        {goalDate && (
+          <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">
+            <Calendar className="h-5 w-5 text-blue-500" />
+            <span>
+              You're expected to reach your weight goal by <strong>{formattedGoalDate}</strong> with this plan.
+            </span>
+          </div>
+        )}
         
         {/* Protein Visualization */}
         <div className="flex items-center gap-3 text-sm bg-background p-3 rounded-lg">

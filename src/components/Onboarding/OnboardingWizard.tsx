@@ -100,11 +100,20 @@ const OnboardingWizard = () => {
             </div>
           </div>
           
-          <CurrentStepComponent 
-            userDetails={userDetails}
-            updateUserDetails={updateUserDetails}
-            onBack={currentStep > 1 ? handleBack : undefined}
-          />
+          {/* Conditional rendering of components based on step */}
+          {currentStep <= 3 ? (
+            <CurrentStepComponent 
+              userDetails={userDetails}
+              updateUserDetails={updateUserDetails}
+              onBack={currentStep > 1 ? handleBack : undefined}
+            />
+          ) : (
+            /* For SuccessStep, don't pass onBack prop */
+            <CurrentStepComponent 
+              userDetails={userDetails}
+              updateUserDetails={updateUserDetails}
+            />
+          )}
         </div>
         
         <div className="flex justify-between mt-8">
