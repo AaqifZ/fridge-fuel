@@ -115,16 +115,16 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
           
           <Slider
             value={[userDetails.currentWeight || 0]}
-            min={useKg ? 40 : 88}
-            max={useKg ? 150 : 330}
+            min={useKg ? 60 : 132} // 60kg or equivalent in lbs
+            max={useKg ? 130 : 286} // 130kg or equivalent in lbs
             step={1}
             onValueChange={(values) => handleWeightChange('current', values[0])}
             className="py-4"
           />
           
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{useKg ? '40 kg' : '88 lbs'}</span>
-            <span>{useKg ? '150 kg' : '330 lbs'}</span>
+            <span>{useKg ? '60 kg' : '132 lbs'}</span>
+            <span>{useKg ? '130 kg' : '286 lbs'}</span>
           </div>
         </div>
         
@@ -146,16 +146,16 @@ const WeightSetupStep: React.FC<WeightSetupStepProps> = ({ userDetails, updateUs
           
           <Slider
             value={[userDetails.targetWeight || 0]}
-            min={useKg ? 40 : 88}
-            max={useKg ? 150 : 330}
+            min={useKg ? 60 : 132} // 60kg or equivalent in lbs
+            max={useKg ? 130 : 286} // 130kg or equivalent in lbs
             step={1}
             onValueChange={(values) => handleWeightChange('target', values[0])}
             className="py-4"
           />
           
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{useKg ? '40 kg' : '88 lbs'}</span>
-            <span>{useKg ? '150 kg' : '330 lbs'}</span>
+            <span>{useKg ? '60 kg' : '132 lbs'}</span>
+            <span>{useKg ? '130 kg' : '286 lbs'}</span>
           </div>
         </div>
       </div>
