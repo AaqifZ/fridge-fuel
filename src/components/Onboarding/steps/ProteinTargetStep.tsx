@@ -30,13 +30,23 @@ const ProteinTargetStep: React.FC<ProteinTargetStepProps> = ({ userDetails, upda
     
     const weightInKg = useKg ? currentWeight : Math.round(currentWeight * 0.453592);
     const gramsPerKg = (proteinTarget / weightInKg).toFixed(1);
+    const gramsPerKgNum = parseFloat(gramsPerKg);
+    
+    let baseMessage = "";
+    if (gramsPerKgNum > 2.1) {
+      baseMessage = `${gramsPerKg}g/kg is on the higher end, maximizing muscle growth`;
+    } else if (gramsPerKgNum < 1.5) {
+      baseMessage = `${gramsPerKg}g/kg is on the lower end, supporting essential functions`;
+    } else {
+      baseMessage = `${gramsPerKg}g/kg supports recovery and metabolic health`;
+    }
     
     if (activityLevel === 'active') {
-      return `${gramsPerKg}g/kg boosts muscle growth for your active lifestyle.`;
+      return `${baseMessage} for your active lifestyle.`;
     } else if (activityLevel === 'moderate') {
-      return `${gramsPerKg}g/kg supports recovery and metabolic health.`;
+      return `${baseMessage} for your moderate activity level.`;
     } else {
-      return `${gramsPerKg}g/kg preserves muscle while supporting overall health.`;
+      return `${baseMessage} while maintaining overall health.`;
     }
   };
   
