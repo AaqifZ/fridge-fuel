@@ -83,7 +83,7 @@ const OnboardingWizard = () => {
         gender, 
         activityLevel, 
         goal,
-        workoutFrequency
+        workoutFrequency // This is now an optional parameter
       );
       
       setProteinTarget(proteinTarget);

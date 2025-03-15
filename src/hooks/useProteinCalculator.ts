@@ -14,7 +14,8 @@ interface ProteinCalculatorState {
     age: number,
     gender: 'male' | 'female' | 'other',
     activityLevel: string,
-    goal: string
+    goal: string,
+    workoutFrequency?: string // Make workoutFrequency optional
   ) => number;
 }
 
@@ -37,7 +38,8 @@ export const useProteinCalculator = create<ProteinCalculatorState>()(
         age: number,
         gender: 'male' | 'female' | 'other',
         activityLevel: string,
-        goal: string
+        goal: string,
+        workoutFrequency?: string // Make workoutFrequency optional
       ) => {
         // Basic BMR calculation using Mifflin-St Jeor Equation
         let bmr;
@@ -89,6 +91,15 @@ export const useProteinCalculator = create<ProteinCalculatorState>()(
           case 'maintenance':
           default:
             proteinPerKg = 1.6; // Baseline protein needs
+        }
+        
+        // Optional adjustment based on workout frequency
+        if (workoutFrequency) {
+          if (workoutFrequency === '6+') {
+            proteinPerKg += 0.2; // Add a bit more protein for very frequent training
+          } else if (workoutFrequency === '0-2') {
+            proteinPerKg -= 0.1; // Slightly less protein for infrequent training
+          }
         }
         
         // Calculate protein target
