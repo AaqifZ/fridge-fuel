@@ -24,8 +24,8 @@ const Index: React.FC = () => {
         </button>
       </div>
       
-      {/* Main content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-5 pb-10">
+      {/* Main content - everything in a single container */}
+      <div className="flex-1 flex flex-col items-center justify-center px-5 py-10">
         {/* App logo/brand */}
         <div className="mb-8">
           <div className="font-bold text-4xl text-[#1EAEDB]">BulkAI</div>
