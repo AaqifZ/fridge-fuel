@@ -5,17 +5,16 @@ import { useProteinCalculator } from '@/hooks/useProteinCalculator';
 
 interface SuccessStepProps {
   userDetails: {
-    weight?: number;
-    height?: number;
-    age?: number;
-    gender?: 'male' | 'female';
+    currentWeight?: number;
+    targetWeight?: number;
     activityLevel?: string;
-    goal?: string;
+    goalTimelineMonths?: number;
+    proteinTarget?: number;
   };
   updateUserDetails: (details: Partial<SuccessStepProps['userDetails']>) => void;
 }
 
-const SuccessStep: React.FC<SuccessStepProps> = () => {
+const SuccessStep: React.FC<SuccessStepProps> = ({ userDetails }) => {
   const { proteinTarget } = useProteinCalculator();
   
   return (
