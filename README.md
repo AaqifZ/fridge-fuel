@@ -10,9 +10,6 @@ A responsive web application that helps users track their protein intake and dis
 - **Recipe Recommendations**: Get personalized high-protein recipe recommendations
 - **User-friendly Interface**: Simple, intuitive UI built with shadcn/ui and Tailwind CSS
 
-## Live Demo
-
-Visit the [live demo](https://lovable.dev/projects/0fbde713-b3fa-40d8-9e84-a6eb67bcbed6) to see the application in action.
 
 ## Getting Started
 
